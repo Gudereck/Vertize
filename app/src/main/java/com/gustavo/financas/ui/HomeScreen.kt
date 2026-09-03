@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
 import androidx.compose.material.icons.filled.DonutLarge
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -49,7 +50,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gustavo.financas.data.Transaction
 import com.gustavo.financas.data.TransactionType
 import com.gustavo.financas.ui.theme.AccentGreen
-import com.gustavo.financas.ui.theme.AccentLilac
+import com.gustavo.financas.ui.theme.AccentPurple
+import com.gustavo.financas.ui.theme.AccentTeal
 import com.gustavo.financas.ui.theme.DespesaColor
 import com.gustavo.financas.ui.theme.ReceitaColor
 import java.text.NumberFormat
@@ -70,7 +72,8 @@ fun HomeScreen(
     viewModel: TransactionViewModel,
     onAddClick: () -> Unit,
     onEditClick: (Transaction) -> Unit,
-    onCategoriesClick: () -> Unit
+    onCategoriesClick: () -> Unit,
+    onHistoryClick: () -> Unit
 ) {
     val transactions by viewModel.transactions.collectAsStateWithLifecycle()
     val saldo by viewModel.saldo.collectAsStateWithLifecycle()
@@ -94,6 +97,9 @@ fun HomeScreen(
                     containerColor = MaterialTheme.colorScheme.background
                 ),
                 actions = {
+                    IconButton(onClick = onHistoryClick) {
+                        Icon(Icons.Default.History, contentDescription = "Histórico mensal", tint = AccentTeal)
+                    }
                     IconButton(onClick = onCategoriesClick) {
                         Icon(Icons.Default.DonutLarge, contentDescription = "Categorias e orçamentos", tint = AccentGreen)
                     }
@@ -281,7 +287,7 @@ private fun InsightBanner(variacaoMensal: Double, modifier: Modifier = Modifier)
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
-        colors = CardDefaults.cardColors(containerColor = AccentLilac)
+        colors = CardDefaults.cardColors(containerColor = AccentPurple)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
