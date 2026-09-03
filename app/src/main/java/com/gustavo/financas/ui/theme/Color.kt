@@ -2,14 +2,15 @@ package com.gustavo.financas.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val AppBackground = Color(0xFF0A0B10)
-val SurfaceDark = Color(0xFF15171D)
-val SurfaceDarkElevated = Color(0xFF1E212A)
-val TextSecondaryDark = Color(0xFF9CA3AF)
+val AppBackground = Color(0xFFFFFFFF)
+val SurfaceDark = Color(0xFFF4F5F7)
+val SurfaceDarkElevated = Color(0xFFE9EBEF)
+val TextPrimaryLight = Color(0xFF14161A)
+val TextSecondaryDark = Color(0xFF6B7280)
 
-val AccentGreen = Color(0xFF34D399)
-val AccentTeal = Color(0xFF22D3C7)
-val AccentPurple = Color(0xFFA599FF)
+val AccentGreen = Color(0xFF10B981)
+val AccentTeal = Color(0xFF0EA5A5)
+val AccentPurple = Color(0xFF7C6FE0)
 
 val ReceitaColor = AccentGreen
-val DespesaColor = Color(0xFFFF6B5B)
+val DespesaColor = Color(0xFFE5493B)
