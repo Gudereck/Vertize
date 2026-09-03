@@ -19,18 +19,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowUpward
-import androidx.compose.material.icons.filled.DonutLarge
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.ReceiptLong
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -51,7 +46,6 @@ import com.gustavo.financas.data.Transaction
 import com.gustavo.financas.data.TransactionType
 import com.gustavo.financas.ui.theme.AccentGreen
 import com.gustavo.financas.ui.theme.AccentPurple
-import com.gustavo.financas.ui.theme.AccentTeal
 import com.gustavo.financas.ui.theme.DespesaColor
 import com.gustavo.financas.ui.theme.ReceitaColor
 import java.text.NumberFormat
@@ -70,10 +64,7 @@ private enum class Filtro(val rotulo: String) { TODOS("Tudo"), RECEITAS("Receita
 @Composable
 fun HomeScreen(
     viewModel: TransactionViewModel,
-    onAddClick: () -> Unit,
-    onEditClick: (Transaction) -> Unit,
-    onCategoriesClick: () -> Unit,
-    onHistoryClick: () -> Unit
+    onEditClick: (Transaction) -> Unit
 ) {
     val transactions by viewModel.transactions.collectAsStateWithLifecycle()
     val saldo by viewModel.saldo.collectAsStateWithLifecycle()
@@ -92,28 +83,11 @@ fun HomeScreen(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
-                title = { Text("Minhas Finanças", fontWeight = FontWeight.SemiBold) },
+                title = { Text("Vertize", fontWeight = FontWeight.SemiBold) },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background
-                ),
-                actions = {
-                    IconButton(onClick = onHistoryClick) {
-                        Icon(Icons.Default.History, contentDescription = "Histórico mensal", tint = AccentTeal)
-                    }
-                    IconButton(onClick = onCategoriesClick) {
-                        Icon(Icons.Default.DonutLarge, contentDescription = "Categorias e orçamentos", tint = AccentGreen)
-                    }
-                }
+                )
             )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = onAddClick,
-                containerColor = AccentGreen,
-                contentColor = Color.Black
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Novo lançamento")
-            }
         }
     ) { padding ->
         Column(
