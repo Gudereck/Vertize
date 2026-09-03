@@ -7,7 +7,9 @@ import com.gustavo.financas.data.BudgetRepository
 import com.gustavo.financas.data.Transaction
 import com.gustavo.financas.data.TransactionRepository
 import com.gustavo.financas.data.TransactionType
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -20,9 +22,20 @@ data class BudgetStatus(val category: String, val gasto: Double, val limite: Dou
     val definido: Boolean get() = limite > 0
 }
 
+data class MonthSummary(val ano: Int, val mes: Int, val receitas: Double, val despesas: Double) {
+    val saldo: Double get() = receitas - despesas
+
+    val rotulo: String get() {
+        val cal = Calendar.getInstance()
+        cal.set(ano, mes, 1)
+        return SimpleDateFormat("MMM/yy", Locale("pt", "BR")).format(cal.time)
+    }
+}
+
 class TransactionViewModel(
     private val repository: TransactionRepository,
-    private val budgetRepository: BudgetRepository
+    private val budgetRepository: BudgetRepository,
+    private val onOrcamentoEstourado: (categoria: String, gasto: Double, limite: Double) -> Unit = { _, _, _ -> }
 ) : ViewModel() {
 
     val transactions: StateFlow<List<Transaction>> = repository.allTransactions
@@ -61,6 +74,40 @@ class TransactionViewModel(
             }
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
+    val historicoMensal: StateFlow<List<MonthSummary>> = transactions
+        .map { list ->
+            val cal = Calendar.getInstance()
+            list.groupBy { transacao ->
+                cal.timeInMillis = transacao.date
+                cal.get(Calendar.YEAR) to cal.get(Calendar.MONTH)
+            }.map { (chave, itens) ->
+                MonthSummary(
+                    ano = chave.first,
+                    mes = chave.second,
+                    receitas = itens.filter { it.type == TransactionType.RECEITA }.sumOf { it.amount },
+                    despesas = itens.filter { it.type == TransactionType.DESPESA }.sumOf { it.amount }
+                )
+            }.sortedWith(compareBy({ it.ano }, { it.mes })).takeLast(6)
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+
+    private val categoriasJaNotificadas = mutableSetOf<String>()
+
+    init {
+        viewModelScope.launch {
+            statusOrcamentos.collect { lista ->
+                val cal = Calendar.getInstance()
+                val chaveDoMes = "${cal.get(Calendar.YEAR)}-${cal.get(Calendar.MONTH)}"
+                lista.filter { it.definido && it.percentual >= 1.0 }.forEach { status ->
+                    val chave = "${status.category}-$chaveDoMes"
+                    if (categoriasJaNotificadas.add(chave)) {
+                        onOrcamentoEstourado(status.category, status.gasto, status.limite)
+                    }
+                }
+            }
+        }
+    }
+
     fun addTransaction(description: String, amount: Double, type: TransactionType, category: String) {
         viewModelScope.launch {
             repository.insert(
@@ -90,10 +137,11 @@ class TransactionViewModel(
 
 class TransactionViewModelFactory(
     private val repository: TransactionRepository,
-    private val budgetRepository: BudgetRepository
+    private val budgetRepository: BudgetRepository,
+    private val onOrcamentoEstourado: (categoria: String, gasto: Double, limite: Double) -> Unit = { _, _, _ -> }
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         @Suppress("UNCHECKED_CAST")
-        return TransactionViewModel(repository, budgetRepository) as T
+        return TransactionViewModel(repository, budgetRepository, onOrcamentoEstourado) as T
     }
 }
