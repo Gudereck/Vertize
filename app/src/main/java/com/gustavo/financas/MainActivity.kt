@@ -142,7 +142,8 @@ class MainActivity : ComponentActivity() {
                                 OnboardingScreen(
                                     onAddFirstTransaction = {
                                         prefs.edit().putBoolean("onboarding_seen", true).apply()
-                                        navController.navigate("add") { popUpTo("onboarding") { inclusive = true } }
+                                        navController.navigate("home") { popUpTo("onboarding") { inclusive = true } }
+                                        navController.navigate("add")
                                     },
                                     onExploreWithSampleData = {
                                         prefs.edit().putBoolean("onboarding_seen", true).apply()
