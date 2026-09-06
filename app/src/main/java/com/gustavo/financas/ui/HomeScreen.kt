@@ -208,7 +208,7 @@ private fun FiltroPills(selecionado: Filtro, onSelecionar: (Filtro) -> Unit, mod
             ) {
                 Text(
                     text = opcao.rotulo,
-                    color = if (ativo) Color.Black else MaterialTheme.colorScheme.onSurface,
+                    color = if (ativo) Color.White else MaterialTheme.colorScheme.onSurface,
                     fontWeight = if (ativo) FontWeight.SemiBold else FontWeight.Normal,
                     style = MaterialTheme.typography.bodyMedium
                 )

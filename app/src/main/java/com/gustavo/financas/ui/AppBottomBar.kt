@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Savings
@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -45,14 +46,14 @@ fun AppBottomBar(navController: NavHostController) {
             selected = currentRoute == "home",
             onClick = { navController.navigateTopLevel("home") },
             icon = { Icon(Icons.Default.Home, contentDescription = "Início") },
-            label = { Text("Início") },
+            label = { NavLabel("Início") },
             colors = navBarItemColors()
         )
         NavigationBarItem(
-            selected = currentRoute == "history",
-            onClick = { navController.navigateTopLevel("history") },
-            icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Transações") },
-            label = { Text("Transações") },
+            selected = currentRoute == "bills",
+            onClick = { navController.navigateTopLevel("bills") },
+            icon = { Icon(Icons.Default.CalendarMonth, contentDescription = "Contas") },
+            label = { NavLabel("Contas") },
             colors = navBarItemColors()
         )
         NavigationBarItem(
@@ -75,17 +76,22 @@ fun AppBottomBar(navController: NavHostController) {
             selected = currentRoute == "goals",
             onClick = { navController.navigateTopLevel("goals") },
             icon = { Icon(Icons.Default.Savings, contentDescription = "Metas") },
-            label = { Text("Metas") },
+            label = { NavLabel("Metas") },
             colors = navBarItemColors()
         )
         NavigationBarItem(
             selected = currentRoute == "mais",
             onClick = { navController.navigateTopLevel("mais") },
             icon = { Icon(Icons.Default.MoreHoriz, contentDescription = "Mais") },
-            label = { Text("Mais") },
+            label = { NavLabel("Mais") },
             colors = navBarItemColors()
         )
     }
+}
+
+@Composable
+private fun NavLabel(text: String) {
+    Text(text, maxLines = 1, overflow = TextOverflow.Ellipsis)
 }
 
 @Composable

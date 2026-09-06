@@ -8,8 +8,8 @@ val SurfaceDarkElevated = Color(0xFFE9EBEF)
 val TextPrimaryLight = Color(0xFF14161A)
 val TextSecondaryDark = Color(0xFF6B7280)
 
-val AccentGreen = Color(0xFF10B981)
-val AccentTeal = Color(0xFF0EA5A5)
+val AccentGreen = Color(0xFF0D9488)
+val AccentBlue = Color(0xFF2563EB)
 val AccentPurple = Color(0xFF7C6FE0)
 
 val ReceitaColor = AccentGreen

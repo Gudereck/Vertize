@@ -108,7 +108,7 @@ fun GoalDetailScreen(
                 FloatingActionButton(
                     onClick = { onAddDepositClick(goalId) },
                     containerColor = AccentGreen,
-                    contentColor = Color.Black
+                    contentColor = Color.White
                 ) {
                     Icon(Icons.Default.Add, contentDescription = "Novo depósito")
                 }

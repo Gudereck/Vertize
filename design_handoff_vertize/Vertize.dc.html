@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"><style>body{margin:0;background:#f2f1ee;font-family:Manrope,system-ui,sans-serif}a{color:oklch(0.45 0.16 300);text-decoration:none}a:hover{color:oklch(0.36 0.16 300)}.dv-turn{padding:44px 48px 40px;border-bottom:1px solid rgba(22,24,28,.09);scroll-margin-top:16px}.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 24px}.dv-tid{font:800 10px ui-monospace,Menlo,monospace;padding:4px 8px;background:#16181c;color:#fff;border-radius:5px;text-decoration:none}.dv-tname{font:700 13px/1.2 Manrope,sans-serif;color:#16181c}.dv-opts{display:flex;flex-wrap:wrap;gap:34px;align-items:flex-start}.dv-opt{flex:none;display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}.dv-oid{font:800 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(22,24,28,.09);color:#16181c;border-radius:5px;text-decoration:none}.dv-olabel{display:flex;align-items:baseline;gap:9px;font:600 11.5px/1.3 Manrope,sans-serif;color:rgba(22,24,28,.55)}.dv-opt:target .dv-oid{background:oklch(0.45 0.16 300);color:#fff}.dv-card{max-width:100%;background:#fff;border:1px solid rgba(22,24,28,.09);border-radius:20px;box-shadow:0 2px 6px rgba(22,24,28,.05);overflow:hidden}.dv-next{margin:26px 0 0;font:600 12px/1.55 Manrope,sans-serif;color:rgba(22,24,28,.5)}</style></helmet>
+
+<section class="dv-turn" id="t1">
+  <div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Vertize — primeira rodada</span></div>
+
+  <div style="max-width:760px;background:#fff;border:1px solid rgba(22,24,28,.09);border-radius:20px;padding:22px 24px;margin-bottom:32px">
+    <div style="font:800 13px Manrope,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.4)">Contexto e decisões</div>
+    <div style="font:600 13.5px/1.6 Manrope,sans-serif;color:rgba(22,24,28,.72);margin-top:12px;text-wrap:pretty">
+      Não consegui ler a pasta <b>ProjetoFinanceiro</b> daqui, então desenhei a partir do seu brief. Se você colar o tema (cores, tipografia, shapes) e um componente de referência, eu realinho.<br><br>
+      <b>Sistema visual:</b> fundo branco, tinta #16181c. Roxo <span style="color:oklch(0.42 0.15 300)">oklch(.42 .15 300)</span> é a cor de marca (saldo, botão +, metas), verde para receitas, azul para histórico, vermelho reservado só para limite estourado — nunca decorativo. Tipografia: Manrope para UI, Space Grotesk nos números.<br><br>
+      <b>Dados de exemplo:</b> setembro/2026, 9 lançamentos, 7 orçamentos (Lazer e Assinaturas estourados de propósito), 3 metas. Tudo mutável no protótipo — adicionar, editar, excluir, mexer nos limites e registrar depósitos funciona de verdade.
+    </div>
+  </div>
+
+  <div class="dv-opts">
+    <div class="dv-opt" id="1a">
+      <div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Protótipo navegável — use a bottom nav, toque num lançamento para editar, mexa nos limites para disparar a notificação</div>
+      <div class="dv-card" style="border:none;background:none;box-shadow:none">
+        <dc-import name="VertizePhone" screen="home" hint-size="390px,844px"></dc-import>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="1c">
+      <div class="dv-olabel"><a class="dv-oid" href="#1c">1c</a>Card de saldo — alternativa clara</div>
+      <div class="dv-card" style="width:352px;padding:20px">
+        <div style="border:1px solid rgba(22,24,28,.12);border-radius:24px;padding:20px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <span style="font:800 11.5px Manrope;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.4)">Saldo de setembro</span>
+            <span style="font:700 11px Manrope;color:oklch(0.45 0.14 155);background:oklch(0.94 0.05 155);border-radius:6px;padding:3px 7px">+18%</span>
+          </div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;letter-spacing:-.035em;margin-top:8px;line-height:1">R$ 6.366,70</div>
+          <div style="display:flex;gap:20px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(22,24,28,.09)">
+            <div style="flex:1;border-left:3px solid oklch(0.55 0.14 155);padding-left:10px"><div style="font:700 11.5px Manrope;color:rgba(22,24,28,.45)">Receitas</div><div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;margin-top:2px">R$ 9.650,00</div></div>
+            <div style="flex:1;border-left:3px solid oklch(0.57 0.17 25);padding-left:10px"><div style="font:700 11.5px Manrope;color:rgba(22,24,28,.45)">Despesas</div><div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;margin-top:2px">R$ 3.283,30</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="1d">
+      <div class="dv-olabel"><a class="dv-oid" href="#1d">1d</a>Gasto por categoria — barras empilhadas em vez de anel</div>
+      <div class="dv-card" style="width:352px;padding:20px">
+        <div style="border:1px solid rgba(22,24,28,.12);border-radius:24px;padding:20px">
+          <div style="font:800 13px Manrope">Setembro · R$ 3.283,30</div>
+          <div style="display:flex;height:14px;border-radius:7px;overflow:hidden;margin-top:14px">
+            <span style="width:64%;background:oklch(0.52 0.16 300)"></span>
+            <span style="width:15%;background:oklch(0.55 0.15 250)"></span>
+            <span style="width:7.3%;background:oklch(0.55 0.14 155)"></span>
+            <span style="width:5.5%;background:oklch(0.57 0.16 22)"></span>
+            <span style="width:4%;background:oklch(0.6 0.13 62)"></span>
+            <span style="width:4.2%;background:oklch(0.5 0.07 285)"></span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:9px;margin-top:16px">
+            <div style="display:flex;align-items:center;gap:8px;font:700 12.5px Manrope"><span style="width:9px;height:9px;border-radius:3px;background:oklch(0.52 0.16 300)"></span><span style="flex:1">Aluguel</span><span style="color:rgba(22,24,28,.5)">64%</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;width:82px;text-align:right">R$ 2.100,00</span></div>
+            <div style="display:flex;align-items:center;gap:8px;font:700 12.5px Manrope"><span style="width:9px;height:9px;border-radius:3px;background:oklch(0.55 0.15 250)"></span><span style="flex:1">Mercado</span><span style="color:rgba(22,24,28,.5)">15%</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;width:82px;text-align:right">R$ 486,90</span></div>
+            <div style="display:flex;align-items:center;gap:8px;font:700 12.5px Manrope"><span style="width:9px;height:9px;border-radius:3px;background:oklch(0.55 0.14 155)"></span><span style="flex:1">Lazer</span><span style="color:oklch(0.5 0.17 25)">estourou</span><span style="font-family:'Space Grotesk',sans-serif;font-weight:600;width:82px;text-align:right">R$ 240,00</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="1e">
+      <div class="dv-olabel"><a class="dv-oid" href="#1e">1e</a>InsightBanner — comparação lado a lado</div>
+      <div class="dv-card" style="width:352px;padding:20px">
+        <div style="border:1px solid rgba(22,24,28,.12);border-radius:22px;padding:18px">
+          <div style="font:800 13.5px/1.35 Manrope;text-wrap:pretty">Você já gastou <span style="color:oklch(0.5 0.17 25)">17% mais</span> que no mesmo período de agosto</div>
+          <div style="display:flex;flex-direction:column;gap:9px;margin-top:15px">
+            <div style="display:flex;align-items:center;gap:10px"><span style="font:700 11.5px Manrope;color:rgba(22,24,28,.45);width:38px">Ago</span><span style="flex:1;height:10px;border-radius:5px;background:rgba(22,24,28,.1);overflow:hidden"><span style="display:block;height:100%;width:70%;background:rgba(22,24,28,.28)"></span></span><span style="font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:600;width:74px;text-align:right">R$ 2.810,00</span></div>
+            <div style="display:flex;align-items:center;gap:10px"><span style="font:800 11.5px Manrope;width:38px">Set</span><span style="flex:1;height:10px;border-radius:5px;background:rgba(22,24,28,.1);overflow:hidden"><span style="display:block;height:100%;width:100%;background:oklch(0.6 0.17 25)"></span></span><span style="font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:700;width:74px;text-align:right">R$ 3.283,30</span></div>
+          </div>
+          <div style="font:600 12px/1.45 Manrope;color:rgba(22,24,28,.5);margin-top:13px">Lazer e Assinaturas passaram do limite. Ver orçamentos ›</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="1f">
+      <div class="dv-olabel"><a class="dv-oid" href="#1f">1f</a>Histórico — receitas e despesas pareadas</div>
+      <div class="dv-card" style="width:352px;padding:20px">
+        <div style="border:1px solid rgba(22,24,28,.12);border-radius:24px;padding:20px 18px 14px">
+          <div style="font:800 13px Manrope">Receitas × despesas</div>
+          <div style="display:flex;align-items:flex-end;gap:14px;height:150px;margin-top:18px">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end"><span style="display:flex;align-items:flex-end;gap:3px;width:100%;height:100%"><span style="flex:1;height:66%;background:oklch(0.55 0.14 155);border-radius:5px 5px 2px 2px"></span><span style="flex:1;height:40%;background:oklch(0.72 0.13 25);border-radius:5px 5px 2px 2px"></span></span><span style="font:700 11px Manrope;color:rgba(22,24,28,.45)">abr</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end"><span style="display:flex;align-items:flex-end;gap:3px;width:100%;height:100%"><span style="flex:1;height:70%;background:oklch(0.55 0.14 155);border-radius:5px 5px 2px 2px"></span><span style="flex:1;height:50%;background:oklch(0.72 0.13 25);border-radius:5px 5px 2px 2px"></span></span><span style="font:700 11px Manrope;color:rgba(22,24,28,.45)">mai</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end"><span style="display:flex;align-items:flex-end;gap:3px;width:100%;height:100%"><span style="flex:1;height:66%;background:oklch(0.55 0.14 155);border-radius:5px 5px 2px 2px"></span><span style="flex:1;height:54%;background:oklch(0.72 0.13 25);border-radius:5px 5px 2px 2px"></span></span><span style="font:700 11px Manrope;color:rgba(22,24,28,.45)">jun</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end"><span style="display:flex;align-items:flex-end;gap:3px;width:100%;height:100%"><span style="flex:1;height:100%;background:oklch(0.55 0.14 155);border-radius:5px 5px 2px 2px"></span><span style="flex:1;height:47%;background:oklch(0.72 0.13 25);border-radius:5px 5px 2px 2px"></span></span><span style="font:700 11px Manrope;color:rgba(22,24,28,.45)">jul</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end"><span style="display:flex;align-items:flex-end;gap:3px;width:100%;height:100%"><span style="flex:1;height:68%;background:oklch(0.55 0.14 155);border-radius:5px 5px 2px 2px"></span><span style="flex:1;height:56%;background:oklch(0.72 0.13 25);border-radius:5px 5px 2px 2px"></span></span><span style="font:700 11px Manrope;color:rgba(22,24,28,.45)">ago</span></div>
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end"><span style="display:flex;align-items:flex-end;gap:3px;width:100%;height:100%"><span style="flex:1;height:74%;background:oklch(0.55 0.14 155);border-radius:5px 5px 2px 2px"></span><span style="flex:1;height:25%;background:oklch(0.72 0.13 25);border-radius:5px 5px 2px 2px"></span></span><span style="font:800 11px Manrope">set</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="1g">
+      <div class="dv-olabel"><a class="dv-oid" href="#1g">1g</a>Meta — termômetro com marcos em vez de anel</div>
+      <div class="dv-card" style="width:352px;padding:20px">
+        <div style="border:1px solid rgba(22,24,28,.12);border-radius:24px;padding:20px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font:800 16px Manrope;letter-spacing:-.01em">Viagem ao Chile</span><span style="font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700">49%</span></div>
+          <div style="position:relative;height:12px;border-radius:6px;background:rgba(22,24,28,.09);margin-top:16px;overflow:hidden"><span style="position:absolute;left:0;top:0;bottom:0;width:49%;background:oklch(0.45 0.15 300);border-radius:6px"></span><span style="position:absolute;left:25%;top:0;bottom:0;width:1.5px;background:#fff"></span><span style="position:absolute;left:50%;top:0;bottom:0;width:1.5px;background:rgba(22,24,28,.2)"></span><span style="position:absolute;left:75%;top:0;bottom:0;width:1.5px;background:rgba(22,24,28,.2)"></span></div>
+          <div style="display:flex;justify-content:space-between;font:700 10.5px Manrope;color:rgba(22,24,28,.4);margin-top:7px"><span>R$ 0</span><span>2 mil</span><span>4 mil</span><span>6 mil</span><span>8 mil</span></div>
+          <div style="display:flex;gap:9px;margin-top:16px">
+            <div style="flex:1;background:oklch(0.97 0.006 300);border-radius:14px;padding:11px"><div style="font:700 10.5px Manrope;letter-spacing:.05em;text-transform:uppercase;color:rgba(22,24,28,.42)">Faltam</div><div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin-top:3px">R$ 4.100</div></div>
+            <div style="flex:1;background:oklch(0.97 0.006 300);border-radius:14px;padding:11px"><div style="font:700 10.5px Manrope;letter-spacing:.05em;text-transform:uppercase;color:rgba(22,24,28,.42)">Ideal/mês</div><div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin-top:3px">R$ 1.367</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="1h">
+      <div class="dv-olabel"><a class="dv-oid" href="#1h">1h</a>Bottom nav — + rente à barra, aba ativa em pill</div>
+      <div class="dv-card" style="width:352px;padding:20px">
+        <div style="border:1px solid rgba(22,24,28,.12);border-radius:24px;padding:12px 10px;display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;background:oklch(0.95 0.025 300);border-radius:14px;padding:8px 0"><span style="width:16px;height:16px;border-radius:5px;background:oklch(0.42 0.15 300)"></span><span style="font:800 10.5px Manrope;color:oklch(0.42 0.15 300)">Início</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;padding:8px 0"><span style="display:flex;align-items:flex-end;gap:2.5px;height:16px"><span style="width:4px;height:8px;border-radius:2px;background:rgba(22,24,28,.34)"></span><span style="width:4px;height:15px;border-radius:2px;background:rgba(22,24,28,.34)"></span><span style="width:4px;height:11px;border-radius:2px;background:rgba(22,24,28,.34)"></span></span><span style="font:700 10.5px Manrope;color:rgba(22,24,28,.34)">Histórico</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;padding:8px 0"><span style="width:34px;height:34px;border-radius:12px;background:oklch(0.36 0.12 300);display:flex;align-items:center;justify-content:center;position:relative"><span style="position:absolute;width:14px;height:2.4px;border-radius:2px;background:#fff"></span><span style="position:absolute;width:2.4px;height:14px;border-radius:2px;background:#fff"></span></span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;padding:8px 0"><span style="width:14px;height:14px;background:rgba(22,24,28,.34);transform:rotate(45deg);border-radius:3px;margin:1px 0"></span><span style="font:700 10.5px Manrope;color:rgba(22,24,28,.34)">Metas</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:5px;flex:1;padding:8px 0"><span style="display:flex;align-items:center;gap:3px;height:16px"><span style="width:4px;height:4px;border-radius:50%;background:rgba(22,24,28,.34)"></span><span style="width:4px;height:4px;border-radius:50%;background:rgba(22,24,28,.34)"></span><span style="width:4px;height:4px;border-radius:50%;background:rgba(22,24,28,.34)"></span></span><span style="font:700 10.5px Manrope;color:rgba(22,24,28,.34)">Mais</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dv-opt" id="1b">
+      <div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>As oito telas lado a lado</div>
+      <div style="display:flex;flex-wrap:wrap;gap:26px">
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="font:800 11px Manrope;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.42)">Início · transações</div><dc-import name="VertizePhone" screen="home" hint-size="390px,844px"></dc-import></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="font:800 11px Manrope;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.42)">Novo lançamento</div><dc-import name="VertizePhone" screen="add" hint-size="390px,844px"></dc-import></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="font:800 11px Manrope;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.42)">Categorias e orçamentos</div><dc-import name="VertizePhone" screen="orc" hint-size="390px,844px"></dc-import></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="font:800 11px Manrope;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.42)">Histórico</div><dc-import name="VertizePhone" screen="hist" hint-size="390px,844px"></dc-import></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="font:800 11px Manrope;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.42)">Metas</div><dc-import name="VertizePhone" screen="metas" hint-size="390px,844px"></dc-import></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="font:800 11px Manrope;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.42)">Detalhe da meta</div><dc-import name="VertizePhone" screen="meta" hint-size="390px,844px"></dc-import></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="font:800 11px Manrope;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.42)">Mais</div><dc-import name="VertizePhone" screen="mais" hint-size="390px,844px"></dc-import></div>
+        <div style="display:flex;flex-direction:column;gap:8px"><div style="font:800 11px Manrope;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.42)">Onboarding · estado vazio</div><dc-import name="VertizePhone" screen="empty" hint-size="390px,844px"></dc-import></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="dv-next">Próximos passos: "adote o card <a class="dv-oid" href="#1c">1c</a> na Home" · "troca o anel do orçamento por <a class="dv-oid" href="#1d">1d</a>" · "desenha o fluxo de criar meta em 3 passos" · "me mande o tema do app pra eu realinhar as cores"</p>
+</section>
+</x-dc>
+</body>
+</html>

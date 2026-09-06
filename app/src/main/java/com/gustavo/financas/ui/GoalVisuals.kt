@@ -10,9 +10,9 @@ import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material.icons.filled.School
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.gustavo.financas.ui.theme.AccentBlue
 import com.gustavo.financas.ui.theme.AccentGreen
 import com.gustavo.financas.ui.theme.AccentPurple
-import com.gustavo.financas.ui.theme.AccentTeal
 
 data class GoalVisual(val icon: ImageVector, val color: Color)
 
@@ -20,7 +20,7 @@ val goalIconOptions = listOf("casa", "viagem", "carro", "educacao", "emergencia"
 
 fun goalIcon(key: String): GoalVisual = when (key) {
     "casa" -> GoalVisual(Icons.Default.Home, AccentPurple)
-    "viagem" -> GoalVisual(Icons.Default.Flight, AccentTeal)
+    "viagem" -> GoalVisual(Icons.Default.Flight, AccentBlue)
     "carro" -> GoalVisual(Icons.Default.DirectionsCar, AccentGreen)
     "educacao" -> GoalVisual(Icons.Default.School, Color(0xFF283593))
     "emergencia" -> GoalVisual(Icons.Default.HealthAndSafety, Color(0xFFC62828))

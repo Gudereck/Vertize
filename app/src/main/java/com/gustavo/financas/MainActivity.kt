@@ -22,16 +22,25 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.gustavo.financas.data.AppDatabase
+import com.gustavo.financas.data.BillRepository
 import com.gustavo.financas.data.BudgetRepository
 import com.gustavo.financas.data.GoalDepositRepository
 import com.gustavo.financas.data.GoalRepository
 import com.gustavo.financas.data.TransactionRepository
+import com.gustavo.financas.notifications.BillReminderWorker
 import com.gustavo.financas.notifications.NotificationHelper
 import com.gustavo.financas.ui.AddDepositScreen
+import com.gustavo.financas.ui.AddEditBillScreen
 import com.gustavo.financas.ui.AddEditGoalScreen
 import com.gustavo.financas.ui.AddTransactionScreen
 import com.gustavo.financas.ui.AppBottomBar
+import com.gustavo.financas.ui.BillsScreen
+import com.gustavo.financas.ui.BillsViewModel
+import com.gustavo.financas.ui.BillsViewModelFactory
 import com.gustavo.financas.ui.CategoriesScreen
 import com.gustavo.financas.ui.GoalDetailScreen
 import com.gustavo.financas.ui.GoalsScreen
@@ -43,6 +52,7 @@ import com.gustavo.financas.ui.MaisScreen
 import com.gustavo.financas.ui.TransactionViewModel
 import com.gustavo.financas.ui.TransactionViewModelFactory
 import com.gustavo.financas.ui.theme.FinancasTheme
+import java.util.concurrent.TimeUnit
 
 class MainActivity : ComponentActivity() {
 
@@ -62,6 +72,10 @@ class MainActivity : ComponentActivity() {
         GoalDepositRepository(AppDatabase.getInstance(applicationContext).goalDepositDao())
     }
 
+    private val billRepository by lazy {
+        BillRepository(AppDatabase.getInstance(applicationContext).billDao())
+    }
+
     private val notificationHelper by lazy { NotificationHelper(applicationContext) }
 
     private val viewModel: TransactionViewModel by viewModels {
@@ -78,6 +92,10 @@ class MainActivity : ComponentActivity() {
         GoalsViewModelFactory(goalRepository, goalDepositRepository)
     }
 
+    private val billsViewModel: BillsViewModel by viewModels {
+        BillsViewModelFactory(billRepository)
+    }
+
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
 
@@ -90,13 +108,19 @@ class MainActivity : ComponentActivity() {
             requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
 
+        WorkManager.getInstance(applicationContext).enqueueUniquePeriodicWork(
+            "bill_reminder_check",
+            ExistingPeriodicWorkPolicy.KEEP,
+            PeriodicWorkRequestBuilder<BillReminderWorker>(1, TimeUnit.DAYS).build()
+        )
+
         setContent {
             FinancasTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     val navController = rememberNavController()
                     val backStackEntry by navController.currentBackStackEntryAsState()
                     val currentRoute = backStackEntry?.destination?.route
-                    val topLevelRoutes = setOf("home", "history", "goals", "mais")
+                    val topLevelRoutes = setOf("home", "bills", "goals", "mais")
 
                     Scaffold(
                         bottomBar = {
@@ -153,7 +177,8 @@ class MainActivity : ComponentActivity() {
                             }
                             composable("mais") {
                                 MaisScreen(
-                                    onCategoriesClick = { navController.navigate("categories") }
+                                    onCategoriesClick = { navController.navigate("categories") },
+                                    onHistoryClick = { navController.navigate("history") }
                                 )
                             }
                             composable("goals") {
@@ -208,6 +233,36 @@ class MainActivity : ComponentActivity() {
                                     onSave = { amount, date -> goalsViewModel.addDeposit(goalId, amount, date) },
                                     onBack = { navController.popBackStack() }
                                 )
+                            }
+                            composable("bills") {
+                                BillsScreen(
+                                    viewModel = billsViewModel,
+                                    onAddClick = { navController.navigate("add_bill") },
+                                    onBillClick = { id -> navController.navigate("edit_bill/$id") }
+                                )
+                            }
+                            composable("add_bill") {
+                                AddEditBillScreen(
+                                    onSave = { name, amount, dueDay, reminderDaysBefore ->
+                                        billsViewModel.addBill(name, amount, dueDay, reminderDaysBefore)
+                                    },
+                                    onBack = { navController.popBackStack() }
+                                )
+                            }
+                            composable(
+                                route = "edit_bill/{id}",
+                                arguments = listOf(navArgument("id") { type = NavType.LongType })
+                            ) { backStackEntry ->
+                                val id = backStackEntry.arguments?.getLong("id") ?: 0L
+                                val bills by billsViewModel.billsStatus.collectAsStateWithLifecycle()
+                                val existing = bills.find { it.bill.id == id }?.bill
+                                if (existing != null) {
+                                    AddEditBillScreen(
+                                        existing = existing,
+                                        onUpdate = { updated -> billsViewModel.updateBill(updated) },
+                                        onBack = { navController.popBackStack() }
+                                    )
+                                }
                             }
                         }
                     }
