@@ -25,7 +25,9 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +41,7 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -65,6 +68,7 @@ import com.gustavo.financas.ui.theme.Hairline
 import com.gustavo.financas.ui.theme.Ink
 import com.gustavo.financas.ui.theme.Ink38
 import com.gustavo.financas.ui.theme.Ink50
+import com.gustavo.financas.ui.theme.Negative
 import com.gustavo.financas.ui.theme.Positive
 import com.gustavo.financas.ui.theme.Surface
 import com.gustavo.financas.ui.theme.SurfaceSoft
@@ -96,6 +100,7 @@ fun GoalDetailScreen(
     val detail by viewModel.selectedGoalDetail.collectAsStateWithLifecycle()
     val depositsPorMes by viewModel.depositsPorMes.collectAsStateWithLifecycle()
     var tab by remember { mutableStateOf(GoalTab.DETALHES) }
+    var showDeleteConfirm by remember { mutableStateOf(false) }
 
     Scaffold(
         containerColor = Surface,
@@ -111,6 +116,9 @@ fun GoalDetailScreen(
                 actions = {
                     IconButton(onClick = { onEditClick(goalId) }) {
                         Icon(Icons.Default.Edit, contentDescription = "Editar meta", tint = Ink50)
+                    }
+                    IconButton(onClick = { showDeleteConfirm = true }) {
+                        Icon(Icons.Default.Delete, contentDescription = "Excluir meta", tint = Negative)
                     }
                 }
             )
@@ -152,6 +160,24 @@ fun GoalDetailScreen(
                     onDeleteDeposit = { viewModel.deleteDeposit(it) }
                 )
             }
+        }
+
+        if (showDeleteConfirm) {
+            AlertDialog(
+                onDismissRequest = { showDeleteConfirm = false },
+                title = { Text("Excluir meta?") },
+                text = { Text("Isso vai apagar \"${current.goal.name}\" e todos os depósitos registrados nela. Essa ação não pode ser desfeita.") },
+                confirmButton = {
+                    TextButton(onClick = {
+                        showDeleteConfirm = false
+                        viewModel.deleteGoal(current.goal)
+                        onBack()
+                    }) { Text("Excluir", color = Negative) }
+                },
+                dismissButton = {
+                    TextButton(onClick = { showDeleteConfirm = false }) { Text("Cancelar") }
+                }
+            )
         }
     }
 }
