@@ -49,6 +49,7 @@ import com.gustavo.financas.ui.GoalsViewModelFactory
 import com.gustavo.financas.ui.HistoryScreen
 import com.gustavo.financas.ui.HomeScreen
 import com.gustavo.financas.ui.MaisScreen
+import com.gustavo.financas.ui.OnboardingScreen
 import com.gustavo.financas.ui.TransactionViewModel
 import com.gustavo.financas.ui.TransactionViewModelFactory
 import com.gustavo.financas.ui.theme.FinancasTheme
@@ -114,6 +115,9 @@ class MainActivity : ComponentActivity() {
             PeriodicWorkRequestBuilder<BillReminderWorker>(1, TimeUnit.DAYS).build()
         )
 
+        val prefs = getSharedPreferences("vertize_prefs", MODE_PRIVATE)
+        val onboardingVisto = prefs.getBoolean("onboarding_seen", false)
+
         setContent {
             FinancasTheme {
                 Surface(modifier = Modifier.fillMaxSize()) {
@@ -131,13 +135,27 @@ class MainActivity : ComponentActivity() {
                     ) { outerPadding ->
                         NavHost(
                             navController = navController,
-                            startDestination = "home",
+                            startDestination = if (onboardingVisto) "home" else "onboarding",
                             modifier = Modifier.padding(outerPadding)
                         ) {
+                            composable("onboarding") {
+                                OnboardingScreen(
+                                    onAddFirstTransaction = {
+                                        prefs.edit().putBoolean("onboarding_seen", true).apply()
+                                        navController.navigate("add") { popUpTo("onboarding") { inclusive = true } }
+                                    },
+                                    onExploreWithSampleData = {
+                                        prefs.edit().putBoolean("onboarding_seen", true).apply()
+                                        viewModel.addTransactionsDeExemplo()
+                                        navController.navigate("home") { popUpTo("onboarding") { inclusive = true } }
+                                    }
+                                )
+                            }
                             composable("home") {
                                 HomeScreen(
                                     viewModel = viewModel,
-                                    onEditClick = { transaction -> navController.navigate("edit/${transaction.id}") }
+                                    onEditClick = { transaction -> navController.navigate("edit/${transaction.id}") },
+                                    onInsightClick = { navController.navigate("categories") }
                                 )
                             }
                             composable("add") {
@@ -159,6 +177,7 @@ class MainActivity : ComponentActivity() {
                                     AddTransactionScreen(
                                         existing = existing,
                                         onUpdate = { updated -> viewModel.updateTransaction(updated) },
+                                        onDelete = { toDelete -> viewModel.delete(toDelete) },
                                         onBack = { navController.popBackStack() }
                                     )
                                 }
@@ -176,7 +195,9 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable("mais") {
+                                val statusOrcamentos by viewModel.statusOrcamentos.collectAsStateWithLifecycle()
                                 MaisScreen(
+                                    statusOrcamentos = statusOrcamentos,
                                     onCategoriesClick = { navController.navigate("categories") },
                                     onHistoryClick = { navController.navigate("history") }
                                 )

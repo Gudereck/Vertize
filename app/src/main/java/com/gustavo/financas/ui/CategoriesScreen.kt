@@ -2,6 +2,9 @@ package com.gustavo.financas.ui
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,65 +15,66 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gustavo.financas.ui.theme.DespesaColor
+import com.gustavo.financas.ui.theme.Hairline
+import com.gustavo.financas.ui.theme.Ink
+import com.gustavo.financas.ui.theme.Ink38
+import com.gustavo.financas.ui.theme.Ink50
+import com.gustavo.financas.ui.theme.Negative
+import com.gustavo.financas.ui.theme.Surface
+import com.gustavo.financas.ui.theme.SurfaceSoft
+import com.gustavo.financas.ui.theme.Warn
 import java.text.NumberFormat
 import java.util.Locale
 
 private val currencyFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR"))
 private const val GAP_GRAUS = 6f
+private const val PASSO_STEPPER = 50.0
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoriesScreen(viewModel: TransactionViewModel, onBack: () -> Unit) {
     val status by viewModel.statusOrcamentos.collectAsStateWithLifecycle()
     val totalMes = status.sumOf { it.gasto }
+    val somaLimites = status.sumOf { it.limite }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = Surface,
         topBar = {
             TopAppBar(
-                title = { Text("Categorias e orçamentos", fontWeight = FontWeight.SemiBold) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+                title = { Text("Categorias e orçamentos", style = MaterialTheme.typography.bodyLarge) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Surface),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar", tint = Ink50)
                     }
                 }
             )
@@ -84,12 +88,12 @@ fun CategoriesScreen(viewModel: TransactionViewModel, onBack: () -> Unit) {
         ) {
             item {
                 if (totalMes > 0) {
-                    DespesasRing(status = status, total = totalMes)
+                    DespesasRing(status = status, total = totalMes, somaLimites = somaLimites)
                 } else {
                     Text(
                         text = "Nenhuma despesa este mês ainda. Você já pode definir os limites abaixo.",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        color = Ink50,
                         modifier = Modifier.padding(vertical = 24.dp)
                     )
                 }
@@ -97,156 +101,195 @@ fun CategoriesScreen(viewModel: TransactionViewModel, onBack: () -> Unit) {
                 Text(
                     text = "Limites por categoria",
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onBackground,
+                    color = Ink,
                     modifier = Modifier.padding(bottom = 12.dp)
                 )
             }
             items(status, key = { it.category }) { item ->
                 CategoriaRow(
                     status = item,
-                    onSalvarLimite = { novoLimite -> viewModel.setOrcamento(item.category, novoLimite) }
+                    onAjustarLimite = { novoLimite -> viewModel.setOrcamento(item.category, novoLimite) }
                 )
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(9.dp))
             }
         }
     }
 }
 
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
-private fun DespesasRing(status: List<BudgetStatus>, total: Double) {
+private fun DespesasRing(status: List<BudgetStatus>, total: Double, somaLimites: Double) {
     val entradas = status.filter { it.gasto > 0 }.sortedByDescending { it.gasto }
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
-            .padding(24.dp),
-        contentAlignment = Alignment.Center
+    Card(
+        modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+        shape = RoundedCornerShape(24.dp),
+        border = androidx.compose.foundation.BorderStroke(1.dp, Hairline),
+        colors = CardDefaults.cardColors(containerColor = Surface)
     ) {
-        Canvas(modifier = Modifier.fillMaxSize()) {
-            val strokeWidth = size.minDimension * 0.11f
-            val arcSize = Size(size.width - strokeWidth, size.height - strokeWidth)
-            val topLeft = Offset(strokeWidth / 2, strokeWidth / 2)
-            var anguloInicial = -90f
-            entradas.forEach { item ->
-                val fatia = if (total > 0) (item.gasto / total).toFloat() else 0f
-                val sweep = (fatia * 360f) - GAP_GRAUS
-                drawArc(
-                    color = categoryVisual(item.category).color,
-                    startAngle = anguloInicial,
-                    sweepAngle = sweep.coerceAtLeast(0f),
-                    useCenter = false,
-                    topLeft = topLeft,
-                    size = arcSize,
-                    style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
-                )
-                anguloInicial += fatia * 360f
+        Column(modifier = Modifier.padding(20.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+            Box(
+                modifier = Modifier
+                    .size(180.dp)
+                    .padding(4.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Canvas(modifier = Modifier.fillMaxSize()) {
+                    val strokeWidth = 18.dp.toPx()
+                    val arcSize = Size(size.width - strokeWidth, size.height - strokeWidth)
+                    val topLeft = Offset(strokeWidth / 2, strokeWidth / 2)
+                    drawArc(
+                        color = SurfaceSoft,
+                        startAngle = -90f,
+                        sweepAngle = 360f,
+                        useCenter = false,
+                        topLeft = topLeft,
+                        size = arcSize,
+                        style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+                    )
+                    var anguloInicial = -90f
+                    entradas.forEach { item ->
+                        val fatia = if (total > 0) (item.gasto / total).toFloat() else 0f
+                        val sweep = (fatia * 360f) - GAP_GRAUS
+                        drawArc(
+                            color = categoryVisual(item.category).color,
+                            startAngle = anguloInicial,
+                            sweepAngle = sweep.coerceAtLeast(0f),
+                            useCenter = false,
+                            topLeft = topLeft,
+                            size = arcSize,
+                            style = Stroke(width = strokeWidth, cap = StrokeCap.Round)
+                        )
+                        anguloInicial += fatia * 360f
+                    }
+                }
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text("GASTO NO MÊS", style = MaterialTheme.typography.labelLarge, color = Ink38)
+                    Text(currencyFormat.format(total), style = MaterialTheme.typography.headlineSmall, color = Ink)
+                    if (somaLimites > 0) {
+                        Text(
+                            "de ${currencyFormat.format(somaLimites)}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Ink38
+                        )
+                    }
+                }
             }
-        }
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(
-                text = "Gasto este mês",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = currencyFormat.format(total),
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Spacer(Modifier.height(14.dp))
+            androidx.compose.foundation.layout.FlowRow(
+                horizontalArrangement = Arrangement.spacedBy(14.dp)
+            ) {
+                entradas.forEach { item ->
+                    val pct = if (total > 0) (item.gasto / total * 100).toInt() else 0
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(modifier = Modifier.size(8.dp).background(categoryVisual(item.category).color, CircleShape))
+                        Text(
+                            "${item.category} · $pct%",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Ink,
+                            modifier = Modifier.padding(start = 6.dp)
+                        )
+                    }
+                }
+            }
         }
     }
 }
 
+@OptIn(androidx.compose.foundation.layout.ExperimentalLayoutApi::class)
 @Composable
-private fun CategoriaRow(status: BudgetStatus, onSalvarLimite: (Double) -> Unit) {
+private fun CategoriaRow(status: BudgetStatus, onAjustarLimite: (Double) -> Unit) {
     val visual = categoryVisual(status.category)
-    var texto by remember(status.limite) {
-        mutableStateOf(if (status.limite > 0) status.limite.toString() else "")
-    }
     val estourou = status.definido && status.percentual >= 1.0
+    val proximo = status.definido && status.percentual in 0.85..0.9999
 
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        border = if (estourou) androidx.compose.foundation.BorderStroke(1.dp, Color(0xFFE0B3A6)) else null,
+        colors = CardDefaults.cardColors(
+            containerColor = if (estourou) Color(0xFFFDF7F5) else Surface
+        )
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(modifier = Modifier.padding(15.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
-                        .size(36.dp)
-                        .background(visual.color.copy(alpha = 0.18f), CircleShape),
+                        .size(32.dp)
+                        .background(visual.color, RoundedCornerShape(10.dp)),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(visual.icon, contentDescription = null, tint = visual.color, modifier = Modifier.size(18.dp))
+                    Text(status.category.take(2).uppercase(), style = MaterialTheme.typography.bodySmall.copy(fontSize = 11.5.sp), color = Color.White)
                 }
                 Column(
                     modifier = Modifier
                         .padding(start = 12.dp)
                         .weight(1f)
                 ) {
-                    Text(status.category, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
+                    Text(status.category, style = MaterialTheme.typography.bodyLarge, color = Ink)
                     Text(
-                        text = "Gasto este mês: ${currencyFormat.format(status.gasto)}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        text = if (status.definido) "${currencyFormat.format(status.gasto)} de ${currencyFormat.format(status.limite)}" else currencyFormat.format(status.gasto),
+                        style = MaterialTheme.typography.titleSmall,
+                        color = Ink50
                     )
+                }
+                Row {
+                    StepperButton("−") { onAjustarLimite((status.limite - PASSO_STEPPER).coerceAtLeast(0.0)) }
+                    Spacer(Modifier.width(6.dp))
+                    StepperButton("+") { onAjustarLimite(status.limite + PASSO_STEPPER) }
                 }
             }
 
             if (status.definido) {
-                Spacer(Modifier.height(10.dp))
+                Spacer(Modifier.height(12.dp))
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(8.dp)
-                        .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(4.dp))
+                        .background(Ink.copy(alpha = 0.08f), RoundedCornerShape(5.dp))
                 ) {
+                    val cor = when {
+                        estourou -> Negative
+                        proximo -> Warn
+                        else -> visual.color
+                    }
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(status.percentual.toFloat().coerceIn(0f, 1f))
                             .height(8.dp)
-                            .background(if (estourou) DespesaColor else visual.color, RoundedCornerShape(4.dp))
+                            .background(cor, RoundedCornerShape(5.dp))
                     )
                 }
-                Text(
-                    text = "${"%.0f".format(status.percentual * 100)}% de ${currencyFormat.format(status.limite)}" +
-                        if (estourou) " • limite estourado" else "",
-                    style = MaterialTheme.typography.labelSmall,
-                    color = if (estourou) DespesaColor else MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
-            }
-
-            val focusManager = LocalFocusManager.current
-            fun salvar() {
-                val valor = texto.replace(",", ".").toDoubleOrNull()
-                if (valor != null && valor > 0) {
-                    onSalvarLimite(valor)
-                    focusManager.clearFocus()
+                if (estourou) {
+                    Row(modifier = Modifier.padding(top = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier.size(16.dp).background(Negative, RoundedCornerShape(4.dp)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("!", color = Color.White, style = MaterialTheme.typography.labelSmall)
+                        }
+                        Text(
+                            "Estourou o limite em ${currencyFormat.format(status.gasto - status.limite)}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color(0xFF802D22),
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
                 }
             }
-
-            OutlinedTextField(
-                value = texto,
-                onValueChange = { texto = it },
-                label = { Text("Limite mensal") },
-                prefix = { Text("R$ ") },
-                singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = { salvar() }),
-                trailingIcon = {
-                    IconButton(onClick = { salvar() }) {
-                        Icon(Icons.Default.Check, contentDescription = "Salvar limite")
-                    }
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp)
-            )
         }
+    }
+}
+
+@Composable
+private fun StepperButton(label: String, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .size(28.dp)
+            .border(1.dp, Hairline, RoundedCornerShape(9.dp))
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(label, style = MaterialTheme.typography.bodyLarge, color = Ink)
     }
 }

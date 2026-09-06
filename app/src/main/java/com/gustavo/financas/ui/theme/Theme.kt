@@ -6,18 +6,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val AppColors = lightColorScheme(
-    primary = AccentGreen,
+    primary = Brand,
     onPrimary = Color.White,
-    background = AppBackground,
-    onBackground = TextPrimaryLight,
-    surface = SurfaceDark,
-    onSurface = TextPrimaryLight,
+    background = Surface,
+    onBackground = Ink,
+    surface = SurfaceSoft,
+    onSurface = Ink,
     surfaceVariant = SurfaceDarkElevated,
-    onSurfaceVariant = TextSecondaryDark,
-    primaryContainer = SurfaceDark,
-    onPrimaryContainer = TextPrimaryLight,
+    onSurfaceVariant = Ink50,
+    primaryContainer = SurfaceSoft,
+    onPrimaryContainer = Ink,
     secondaryContainer = SurfaceDarkElevated,
-    onSecondaryContainer = TextPrimaryLight
+    onSecondaryContainer = Ink,
+    outline = Hairline
 )
 
 @Composable

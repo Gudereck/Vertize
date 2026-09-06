@@ -1,5 +1,6 @@
 package com.gustavo.financas.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,30 +16,30 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Savings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gustavo.financas.ui.theme.AccentGreen
+import com.gustavo.financas.ui.theme.Brand
+import com.gustavo.financas.ui.theme.Hairline
+import com.gustavo.financas.ui.theme.Ink
+import com.gustavo.financas.ui.theme.Ink38
+import com.gustavo.financas.ui.theme.Ink50
+import com.gustavo.financas.ui.theme.Positive
+import com.gustavo.financas.ui.theme.Surface
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -52,64 +53,68 @@ fun GoalsScreen(
     onGoalClick: (Long) -> Unit
 ) {
     val goalsWithProgress by viewModel.goalsWithProgress.collectAsStateWithLifecycle()
+    val totalGuardado = goalsWithProgress.sumOf { it.totalDeposited }
 
-    Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
-        topBar = {
-            TopAppBar(
-                title = { Text("Metas", fontWeight = FontWeight.SemiBold) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = onAddClick,
-                containerColor = AccentGreen,
-                contentColor = Color.White
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Nova meta")
-            }
-        }
-    ) { padding ->
-        if (goalsWithProgress.isEmpty()) {
-            Column(
+    Scaffold(containerColor = Surface) { padding ->
+        Column(modifier = Modifier.padding(padding).fillMaxSize()) {
+            Row(
                 modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize()
-                    .padding(32.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    Icons.Default.Savings,
-                    contentDescription = null,
-                    modifier = Modifier.size(56.dp),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                Text(
-                    text = "Nenhuma meta ainda",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(top = 16.dp)
-                )
-                Text(
-                    text = "Toque no + para criar sua primeira meta de economia.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 4.dp)
-                )
+                Column {
+                    Text("Metas", style = MaterialTheme.typography.titleLarge, color = Ink)
+                    Text(
+                        text = "${currencyFormat.format(totalGuardado)} guardados em ${goalsWithProgress.size} ${if (goalsWithProgress.size == 1) "meta" else "metas"}",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Ink50
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .background(Brand, RoundedCornerShape(13.dp))
+                        .clickable(onClick = onAddClick)
+                        .padding(horizontal = 14.dp, vertical = 10.dp)
+                ) {
+                    Text("Nova", style = MaterialTheme.typography.bodyMedium, color = Color.White)
+                }
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(padding)
-                    .fillMaxSize()
-                    .padding(horizontal = 20.dp),
-                contentPadding = PaddingValues(bottom = 96.dp)
-            ) {
-                items(goalsWithProgress, key = { it.goal.id }) { item ->
-                    GoalCard(item = item, onClick = { onGoalClick(item.goal.id) })
-                    Spacer(Modifier.height(12.dp))
+
+            if (goalsWithProgress.isEmpty()) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(32.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(Icons.Default.Savings, contentDescription = null, modifier = Modifier.size(56.dp), tint = Ink38)
+                    Text(
+                        text = "Nenhuma meta ainda",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Ink,
+                        modifier = Modifier.padding(top = 16.dp)
+                    )
+                    Text(
+                        text = "Toque em Nova para criar sua primeira meta de economia.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Ink50,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 20.dp),
+                    contentPadding = PaddingValues(bottom = 96.dp)
+                ) {
+                    items(goalsWithProgress, key = { it.goal.id }) { item ->
+                        GoalCard(item = item, onClick = { onGoalClick(item.goal.id) })
+                        Spacer(Modifier.height(12.dp))
+                    }
                 }
             }
         }
@@ -118,58 +123,90 @@ fun GoalsScreen(
 
 @Composable
 private fun GoalCard(item: GoalProgress, onClick: () -> Unit) {
-    val visual = goalIcon(item.goal.icon)
+    val alcancada = item.goal.achieved
+    val corPrincipal = if (alcancada) Positive else Brand
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        shape = RoundedCornerShape(24.dp),
+        border = BorderStroke(1.dp, Hairline),
+        colors = CardDefaults.cardColors(containerColor = if (alcancada) Color(0xFFF7FDF9) else Surface)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(visual.color.copy(alpha = 0.18f), CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(visual.icon, contentDescription = null, tint = visual.color, modifier = Modifier.size(20.dp))
-                }
-                Column(
-                    modifier = Modifier
-                        .padding(start = 12.dp)
-                        .weight(1f)
-                ) {
-                    Text(item.goal.name, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
-                    Text(
-                        text = "${currencyFormat.format(item.totalDeposited)} de ${currencyFormat.format(item.goal.targetAmount)}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
+        Row(modifier = Modifier.padding(18.dp), verticalAlignment = Alignment.CenterVertically) {
+            MiniRing(percent = item.percent, color = corPrincipal, size = 56)
+            Column(modifier = Modifier.padding(start = 14.dp).weight(1f)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(item.goal.name, style = MaterialTheme.typography.titleMedium, color = Ink)
+                    if (alcancada) {
+                        Box(
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .background(Color(0xFFDDF3E2), RoundedCornerShape(6.dp))
+                                .padding(horizontal = 6.dp, vertical = 2.dp)
+                        ) {
+                            Text("ALCANÇADA", style = MaterialTheme.typography.labelSmall, color = Color(0xFF1F6B41))
+                        }
+                    }
                 }
                 Text(
-                    text = "${"%.0f".format(item.percent * 100)}%",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = visual.color
+                    text = "${currencyFormat.format(item.totalDeposited)} de ${currencyFormat.format(item.goal.targetAmount)}",
+                    style = MaterialTheme.typography.titleSmall,
+                    color = Ink50,
+                    modifier = Modifier.padding(top = 2.dp)
                 )
-            }
-            Spacer(Modifier.height(10.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(4.dp))
-            ) {
+                Spacer(Modifier.height(8.dp))
                 Box(
                     modifier = Modifier
-                        .fillMaxWidth(item.percent.toFloat().coerceIn(0f, 1f))
-                        .height(8.dp)
-                        .background(visual.color, RoundedCornerShape(4.dp))
+                        .fillMaxWidth()
+                        .height(7.dp)
+                        .background(Ink.copy(alpha = 0.08f), RoundedCornerShape(4.dp))
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(item.percent.toFloat().coerceIn(0f, 1f))
+                            .height(7.dp)
+                            .background(corPrincipal, RoundedCornerShape(4.dp))
+                    )
+                }
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    text = if (alcancada) "Meta concluída" else "Faltam ${currencyFormat.format((item.goal.targetAmount - item.totalDeposited).coerceAtLeast(0.0))}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Ink50
                 )
             }
         }
+    }
+}
+
+@Composable
+fun MiniRing(percent: Double, color: Color, size: Int) {
+    Box(modifier = Modifier.size(size.dp), contentAlignment = Alignment.Center) {
+        androidx.compose.foundation.Canvas(modifier = Modifier.fillMaxSize()) {
+            val strokeWidth = 6.dp.toPx()
+            val arcSize = androidx.compose.ui.geometry.Size(this.size.width - strokeWidth, this.size.height - strokeWidth)
+            val topLeft = androidx.compose.ui.geometry.Offset(strokeWidth / 2, strokeWidth / 2)
+            drawArc(
+                color = color.copy(alpha = 0.15f),
+                startAngle = -90f,
+                sweepAngle = 360f,
+                useCenter = false,
+                topLeft = topLeft,
+                size = arcSize,
+                style = androidx.compose.ui.graphics.drawscope.Stroke(width = strokeWidth, cap = androidx.compose.ui.graphics.StrokeCap.Round)
+            )
+            drawArc(
+                color = color,
+                startAngle = -90f,
+                sweepAngle = (percent * 360f).toFloat(),
+                useCenter = false,
+                topLeft = topLeft,
+                size = arcSize,
+                style = androidx.compose.ui.graphics.drawscope.Stroke(width = strokeWidth, cap = androidx.compose.ui.graphics.StrokeCap.Round)
+            )
+        }
+        Text("${"%.0f".format(percent * 100)}%", style = MaterialTheme.typography.titleSmall, color = color)
     }
 }

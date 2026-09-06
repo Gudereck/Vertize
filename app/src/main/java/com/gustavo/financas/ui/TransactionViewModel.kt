@@ -133,6 +133,20 @@ class TransactionViewModel(
     fun setOrcamento(category: String, limite: Double) {
         viewModelScope.launch { budgetRepository.setLimite(category, limite) }
     }
+
+    fun addTransactionsDeExemplo() {
+        val agora = System.currentTimeMillis()
+        val umDia = 24L * 60 * 60 * 1000
+        val exemplos = listOf(
+            Transaction(description = "Salário", amount = 4800.0, type = TransactionType.RECEITA, category = "Salário", date = agora - umDia * 5),
+            Transaction(description = "Mercado", amount = 350.40, type = TransactionType.DESPESA, category = "Mercado", date = agora - umDia * 4),
+            Transaction(description = "Aluguel", amount = 1500.0, type = TransactionType.DESPESA, category = "Aluguel", date = agora - umDia * 3),
+            Transaction(description = "Transporte", amount = 120.0, type = TransactionType.DESPESA, category = "Transporte", date = agora - umDia)
+        )
+        viewModelScope.launch {
+            exemplos.forEach { repository.insert(it) }
+        }
+    }
 }
 
 class TransactionViewModelFactory(
