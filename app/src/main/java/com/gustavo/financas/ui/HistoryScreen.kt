@@ -1,5 +1,6 @@
 package com.gustavo.financas.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,11 +10,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,12 +30,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gustavo.financas.ui.theme.DespesaColor
-import com.gustavo.financas.ui.theme.ReceitaColor
+import com.gustavo.financas.ui.theme.BrandActive
+import com.gustavo.financas.ui.theme.Hairline
+import com.gustavo.financas.ui.theme.Ink
+import com.gustavo.financas.ui.theme.Ink38
+import com.gustavo.financas.ui.theme.Ink50
+import com.gustavo.financas.ui.theme.Negative
+import com.gustavo.financas.ui.theme.Positive
+import com.gustavo.financas.ui.theme.Surface
 import java.text.NumberFormat
+import java.util.Calendar
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.max
@@ -46,14 +56,14 @@ fun HistoryScreen(viewModel: TransactionViewModel, onBack: () -> Unit) {
     val historico by viewModel.historicoMensal.collectAsStateWithLifecycle()
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = Surface,
         topBar = {
             TopAppBar(
-                title = { Text("Histórico mensal", fontWeight = FontWeight.SemiBold) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+                title = { Text("Histórico", style = MaterialTheme.typography.bodyLarge) },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Surface),
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Voltar")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar", tint = Ink50)
                     }
                 }
             )
@@ -68,7 +78,7 @@ fun HistoryScreen(viewModel: TransactionViewModel, onBack: () -> Unit) {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text("Ainda não há histórico suficiente.", style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onBackground)
+                Text("Ainda não há histórico suficiente.", style = MaterialTheme.typography.bodyLarge, color = Ink)
             }
         } else {
             LazyColumn(
@@ -78,13 +88,18 @@ fun HistoryScreen(viewModel: TransactionViewModel, onBack: () -> Unit) {
                     .padding(horizontal = 20.dp)
             ) {
                 item {
+                    Text(
+                        "Saldo dos últimos 6 meses",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Ink50,
+                        modifier = Modifier.padding(top = 4.dp, bottom = 14.dp)
+                    )
                     SaldoMensalChart(historico)
                     Spacer(Modifier.height(24.dp))
                     Text(
-                        text = "Detalhes por mês",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onBackground,
+                        text = "DETALHAMENTO",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = Ink38,
                         modifier = Modifier.padding(bottom = 12.dp)
                     )
                 }
@@ -100,26 +115,28 @@ fun HistoryScreen(viewModel: TransactionViewModel, onBack: () -> Unit) {
 @Composable
 private fun SaldoMensalChart(historico: List<MonthSummary>) {
     val maxAbs = historico.maxOf { max(abs(it.saldo), 1.0) }
+    val saldoMedio = historico.map { it.saldo }.average()
+    val cal = Calendar.getInstance()
+    val mesAtualIdx = cal.get(Calendar.YEAR) * 12 + cal.get(Calendar.MONTH)
 
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        shape = RoundedCornerShape(24.dp),
+        border = BorderStroke(1.dp, Hairline),
+        colors = CardDefaults.cardColors(containerColor = Surface)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                text = "Saldo por mês",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(Modifier.height(12.dp))
+        Column(modifier = Modifier.padding(start = 20.dp, top = 20.dp, end = 18.dp, bottom = 14.dp)) {
+            Text("Saldo médio", style = MaterialTheme.typography.bodySmall, color = Ink50)
+            Text(currencyFormat.format(saldoMedio), style = MaterialTheme.typography.titleSmall, color = Ink)
+            Spacer(Modifier.height(16.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(140.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                    .height(158.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 historico.forEach { mes ->
+                    val ehMesAtual = (mes.ano * 12 + mes.mes) == mesAtualIdx
                     Column(
                         modifier = Modifier
                             .weight(1f)
@@ -127,28 +144,32 @@ private fun SaldoMensalChart(historico: List<MonthSummary>) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Bottom
                     ) {
+                        Text(
+                            mes.rotulo,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = if (ehMesAtual) Ink else Ink38
+                        )
                         Canvas(
                             modifier = Modifier
                                 .weight(1f)
                                 .fillMaxWidth()
-                                .padding(horizontal = 6.dp)
+                                .padding(top = 4.dp)
                         ) {
-                            val centroY = size.height / 2
                             val fracao = (abs(mes.saldo) / maxAbs).toFloat().coerceIn(0f, 1f)
-                            val alturaBarra = (size.height / 2) * fracao
-                            val cor = if (mes.saldo >= 0) ReceitaColor else DespesaColor
-                            val topo = if (mes.saldo >= 0) centroY - alturaBarra else centroY
-                            drawRect(
+                            val alturaBarra = size.height * fracao
+                            val cor = if (ehMesAtual) BrandActive else BrandActive.copy(alpha = 0.35f)
+                            drawRoundRect(
                                 color = cor,
-                                topLeft = androidx.compose.ui.geometry.Offset(0f, topo),
-                                size = androidx.compose.ui.geometry.Size(size.width, alturaBarra)
+                                topLeft = Offset(0f, size.height - alturaBarra),
+                                size = Size(size.width, alturaBarra),
+                                cornerRadius = androidx.compose.ui.geometry.CornerRadius(8.dp.toPx(), 8.dp.toPx())
                             )
                         }
-                        Spacer(Modifier.height(6.dp))
                         Text(
-                            text = mes.rotulo,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            text = currencyFormat.format(mes.saldo).replace(",00", ""),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = Ink,
+                            modifier = Modifier.padding(top = 6.dp)
                         )
                     }
                 }
@@ -161,29 +182,33 @@ private fun SaldoMensalChart(historico: List<MonthSummary>) {
 private fun MonthCard(mes: MonthSummary) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(20.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        shape = RoundedCornerShape(18.dp),
+        border = BorderStroke(1.dp, Hairline),
+        colors = CardDefaults.cardColors(containerColor = Surface)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(mes.rotulo.replaceFirstChar { it.uppercase() }, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 15.dp, vertical = 13.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                mes.rotulo.replaceFirstChar { it.uppercase() },
+                style = MaterialTheme.typography.bodyLarge,
+                color = Ink,
+                modifier = Modifier.width(62.dp)
+            )
+            Column(modifier = Modifier.weight(1f)) {
+                Text("Receitas: ${currencyFormat.format(mes.receitas)}", style = MaterialTheme.typography.bodySmall, color = Positive)
+                Text("Despesas: ${currencyFormat.format(mes.despesas)}", style = MaterialTheme.typography.bodySmall, color = Negative)
+            }
+            Column(horizontalAlignment = Alignment.End) {
+                Text("SALDO", style = MaterialTheme.typography.labelLarge, color = Ink38)
                 Text(
                     currencyFormat.format(mes.saldo),
-                    style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = if (mes.saldo >= 0) ReceitaColor else DespesaColor
+                    style = MaterialTheme.typography.titleSmall,
+                    color = if (mes.saldo >= 0) Positive else Negative
                 )
-            }
-            Spacer(Modifier.height(8.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text("Receitas: ${currencyFormat.format(mes.receitas)}", style = MaterialTheme.typography.bodySmall, color = ReceitaColor)
-                Text("Despesas: ${currencyFormat.format(mes.despesas)}", style = MaterialTheme.typography.bodySmall, color = DespesaColor)
             }
         }
     }
