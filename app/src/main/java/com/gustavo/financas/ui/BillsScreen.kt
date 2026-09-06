@@ -3,7 +3,6 @@ package com.gustavo.financas.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,11 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Savings
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,6 +37,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gustavo.financas.ui.theme.AccentGreen
+import com.gustavo.financas.ui.theme.DespesaColor
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -46,18 +45,18 @@ private val currencyFormat = NumberFormat.getCurrencyInstance(Locale("pt", "BR")
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GoalsScreen(
-    viewModel: GoalsViewModel,
+fun BillsScreen(
+    viewModel: BillsViewModel,
     onAddClick: () -> Unit,
-    onGoalClick: (Long) -> Unit
+    onBillClick: (Long) -> Unit
 ) {
-    val goalsWithProgress by viewModel.goalsWithProgress.collectAsStateWithLifecycle()
+    val billsStatus by viewModel.billsStatus.collectAsStateWithLifecycle()
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopAppBar(
-                title = { Text("Metas", fontWeight = FontWeight.SemiBold) },
+                title = { Text("Contas", fontWeight = FontWeight.SemiBold) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
             )
         },
@@ -67,11 +66,11 @@ fun GoalsScreen(
                 containerColor = AccentGreen,
                 contentColor = Color.White
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Nova meta")
+                Icon(Icons.Default.Add, contentDescription = "Nova conta")
             }
         }
     ) { padding ->
-        if (goalsWithProgress.isEmpty()) {
+        if (billsStatus.isEmpty()) {
             Column(
                 modifier = Modifier
                     .padding(padding)
@@ -81,19 +80,19 @@ fun GoalsScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    Icons.Default.Savings,
+                    Icons.Default.CalendarMonth,
                     contentDescription = null,
                     modifier = Modifier.size(56.dp),
                     tint = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Text(
-                    text = "Nenhuma meta ainda",
+                    text = "Nenhuma conta cadastrada",
                     style = MaterialTheme.typography.titleMedium,
                     color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(top = 16.dp)
                 )
                 Text(
-                    text = "Toque no + para criar sua primeira meta de economia.",
+                    text = "Toque no + para reservar uma conta e ser avisado do vencimento.",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 4.dp)
@@ -107,8 +106,8 @@ fun GoalsScreen(
                     .padding(horizontal = 20.dp),
                 contentPadding = PaddingValues(bottom = 96.dp)
             ) {
-                items(goalsWithProgress, key = { it.goal.id }) { item ->
-                    GoalCard(item = item, onClick = { onGoalClick(item.goal.id) })
+                items(billsStatus, key = { it.bill.id }) { status ->
+                    BillCard(status = status, onClick = { onBillClick(status.bill.id) })
                     Spacer(Modifier.height(12.dp))
                 }
             }
@@ -117,8 +116,19 @@ fun GoalsScreen(
 }
 
 @Composable
-private fun GoalCard(item: GoalProgress, onClick: () -> Unit) {
-    val visual = goalIcon(item.goal.icon)
+private fun BillCard(status: BillStatus, onClick: () -> Unit) {
+    val rotulo = when {
+        !status.bill.active -> "Pausada"
+        status.diasRestantes < 0 -> "Atrasada"
+        status.diasRestantes == 0 -> "Vence hoje"
+        status.diasRestantes == 1 -> "Vence amanhã"
+        else -> "Vence em ${status.diasRestantes} dias"
+    }
+    val corRotulo = when {
+        !status.bill.active -> MaterialTheme.colorScheme.onSurfaceVariant
+        status.diasRestantes <= 0 -> DespesaColor
+        else -> MaterialTheme.colorScheme.onSurfaceVariant
+    }
 
     Card(
         modifier = Modifier
@@ -127,49 +137,27 @@ private fun GoalCard(item: GoalProgress, onClick: () -> Unit) {
         shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp)
-                        .background(visual.color.copy(alpha = 0.18f), CircleShape),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(visual.icon, contentDescription = null, tint = visual.color, modifier = Modifier.size(20.dp))
-                }
-                Column(
-                    modifier = Modifier
-                        .padding(start = 12.dp)
-                        .weight(1f)
-                ) {
-                    Text(item.goal.name, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
-                    Text(
-                        text = "${currencyFormat.format(item.totalDeposited)} de ${currencyFormat.format(item.goal.targetAmount)}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(status.bill.name, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurface)
                 Text(
-                    text = "${"%.0f".format(item.percent * 100)}%",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = visual.color
+                    text = "Todo dia ${status.bill.dueDay} • $rotulo",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = corRotulo
                 )
             }
-            Spacer(Modifier.height(10.dp))
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(8.dp)
-                    .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(4.dp))
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth(item.percent.toFloat().coerceIn(0f, 1f))
-                        .height(8.dp)
-                        .background(visual.color, RoundedCornerShape(4.dp))
-                )
-            }
+            Text(
+                text = currencyFormat.format(status.bill.amount),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }

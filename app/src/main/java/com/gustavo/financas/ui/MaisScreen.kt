@@ -11,9 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.DonutLarge
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,7 +36,7 @@ import com.gustavo.financas.ui.theme.AccentGreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MaisScreen(onCategoriesClick: () -> Unit) {
+fun MaisScreen(onCategoriesClick: () -> Unit, onHistoryClick: () -> Unit) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
@@ -53,6 +56,12 @@ fun MaisScreen(onCategoriesClick: () -> Unit) {
                 icon = Icons.Default.DonutLarge,
                 label = "Categorias e orçamentos",
                 onClick = onCategoriesClick
+            )
+            Spacer(Modifier.height(12.dp))
+            MaisItem(
+                icon = Icons.Default.History,
+                label = "Histórico mensal",
+                onClick = onHistoryClick
             )
         }
     }

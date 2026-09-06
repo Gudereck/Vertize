@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}input,button{font-family:inherit}input::placeholder{color:rgba(22,24,28,.32)}a{color:oklch(0.45 0.16 300);text-decoration:none}a:hover{color:oklch(0.38 0.16 300)}@keyframes vzin{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}</style></helmet>
+<div style="position:relative;width:390px;height:844px;background:#ffffff;border-radius:42px;border:1px solid rgba(22,24,28,.14);box-shadow:0 24px 60px -20px rgba(22,24,28,.28);overflow:hidden;font-family:Manrope,system-ui,sans-serif;color:#16181c;display:flex;flex-direction:column">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 26px 6px;font-size:12px;font-weight:700;letter-spacing:.02em;flex:none">
+    <span>9:41</span>
+    <div style="display:flex;align-items:center;gap:4px">
+      <span style="width:15px;height:8px;border-radius:2px;background:#16181c;display:block"></span>
+      <span style="width:4px;height:8px;border-radius:2px;background:rgba(22,24,28,.35);display:block"></span>
+      <span style="width:22px;height:9px;border-radius:3px;border:1.5px solid rgba(22,24,28,.5);display:block"></span>
+    </div>
+  </div>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{false}}">
+    <div style="position:absolute;top:46px;left:12px;right:12px;z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border:1px solid rgba(22,24,28,.1);border-radius:20px;padding:12px 14px;box-shadow:0 18px 40px -12px rgba(22,24,28,.35);display:flex;gap:11px;align-items:flex-start;animation:vzin .28s ease">
+      <span style="width:34px;height:34px;border-radius:10px;background:oklch(0.36 0.12 300);display:flex;align-items:center;justify-content:center;flex:none"><span style="width:12px;height:12px;background:#fff;transform:rotate(45deg);border-radius:2px;display:block"></span></span>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:12.5px;font-weight:800">Vertize</span><span style="font-size:11px;color:rgba(22,24,28,.45);font-weight:600">agora</span></div>
+        <div style="font-size:13px;font-weight:700;margin-top:2px">{{toastTitle}}</div>
+        <div style="font-size:12.5px;color:rgba(22,24,28,.6);line-height:1.35;margin-top:1px">{{toastBody}}</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="flex:1;overflow-y:auto;overflow-x:hidden">
+
+  <sc-if value="{{isHome}}" hint-placeholder-val="{{true}}">
+    <div style="padding:6px 20px 108px;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;border-radius:8px;background:oklch(0.36 0.12 300);display:flex;align-items:center;justify-content:center"><span style="width:9px;height:9px;background:#fff;transform:rotate(45deg);border-radius:1.5px;display:block"></span></span>
+          <span style="font-family:'Space Grotesk',Manrope,sans-serif;font-size:19px;font-weight:700;letter-spacing:-.02em">Vertize</span>
+        </div>
+        <span style="width:34px;height:34px;border-radius:50%;background:oklch(0.94 0.02 300);color:oklch(0.42 0.14 300);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800">L</span>
+      </div>
+
+      <div style="background:oklch(0.34 0.115 300);border-radius:26px;padding:22px 22px 18px;color:#fff">
+        <div style="font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.7)">Saldo de setembro</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:38px;font-weight:700;letter-spacing:-.03em;margin-top:6px;line-height:1">{{saldoFmt}}</div>
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <div style="flex:1;background:rgba(255,255,255,.12);border-radius:16px;padding:11px 13px">
+            <div style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:oklch(0.78 0.16 155);display:block"></span><span style="font-size:11.5px;font-weight:700;color:rgba(255,255,255,.78)">Receitas</span></div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;margin-top:5px">{{receitasFmt}}</div>
+          </div>
+          <div style="flex:1;background:rgba(255,255,255,.12);border-radius:16px;padding:11px 13px">
+            <div style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:50%;background:oklch(0.75 0.16 25);display:block"></span><span style="font-size:11.5px;font-weight:700;color:rgba(255,255,255,.78)">Despesas</span></div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;margin-top:5px">{{despesasFmt}}</div>
+          </div>
+        </div>
+      </div>
+
+      <sc-if value="{{showInsight}}" hint-placeholder-val="{{true}}">
+        <button onClick="{{goOrc}}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:oklch(0.96 0.035 60);border:1px solid oklch(0.88 0.06 60);border-radius:18px;padding:13px 14px;cursor:pointer" style-hover="background:oklch(0.94 0.045 60)">
+          <span style="width:30px;height:30px;border-radius:9px;background:oklch(0.72 0.14 55);display:flex;align-items:center;justify-content:center;flex:none"><span style="width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:9px solid #fff;display:block"></span></span>
+          <span style="flex:1;font-size:13px;line-height:1.35;color:oklch(0.35 0.06 60);font-weight:600">{{insightText}}</span>
+          <span style="font-size:16px;color:oklch(0.55 0.08 60);font-weight:700">›</span>
+        </button>
+      </sc-if>
+
+      <div style="display:flex;gap:6px;background:oklch(0.96 0.004 280);border-radius:14px;padding:4px">
+        <button onClick="{{setTudo}}" style="flex:1;border:none;border-radius:11px;padding:9px 0;font-size:13px;font-weight:700;cursor:pointer;background:{{fTudoBg}};color:{{fTudoFg}};box-shadow:{{fTudoSh}}">Tudo</button>
+        <button onClick="{{setRec}}" style="flex:1;border:none;border-radius:11px;padding:9px 0;font-size:13px;font-weight:700;cursor:pointer;background:{{fRecBg}};color:{{fRecFg}};box-shadow:{{fRecSh}}">Receitas</button>
+        <button onClick="{{setDesp}}" style="flex:1;border:none;border-radius:11px;padding:9px 0;font-size:13px;font-weight:700;cursor:pointer;background:{{fDespBg}};color:{{fDespFg}};box-shadow:{{fDespSh}}">Despesas</button>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <sc-for list="{{txList}}" as="t" hint-placeholder-count="5">
+          <div>
+            <sc-if value="{{t.showDay}}" hint-placeholder-val="{{false}}">
+              <div style="font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.38);padding:14px 2px 8px">{{t.dayLabel}}</div>
+            </sc-if>
+            <button onClick="{{t.edit}}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:none;padding:9px 2px;cursor:pointer;border-radius:14px" style-hover="background:oklch(0.97 0.003 280)">
+              <span style="width:38px;height:38px;border-radius:12px;background:{{t.tint}};color:{{t.color}};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex:none;letter-spacing:-.02em">{{t.mono}}</span>
+              <span style="flex:1;min-width:0">
+                <span style="display:block;font-size:14.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{t.desc}}</span>
+                <span style="display:block;font-size:12.5px;color:rgba(22,24,28,.5);font-weight:600;margin-top:1px">{{t.cat}}</span>
+              </span>
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;color:{{t.amtColor}};white-space:nowrap">{{t.amt}}</span>
+            </button>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isHist}}" hint-placeholder-val="{{false}}">
+    <div style="padding:6px 20px 108px;display:flex;flex-direction:column;gap:20px">
+      <div style="padding-top:6px"><div style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.03em">Histórico</div><div style="font-size:13px;color:rgba(22,24,28,.5);font-weight:600;margin-top:2px">Saldo dos últimos 6 meses</div></div>
+
+      <div style="border:1px solid rgba(22,24,28,.1);border-radius:24px;padding:20px 18px 14px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-size:12.5px;font-weight:700;color:rgba(22,24,28,.5)">Saldo médio</span><span style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600">{{saldoMedioFmt}}</span></div>
+        <div style="display:flex;align-items:flex-end;gap:10px;height:158px;margin-top:18px">
+          <sc-for list="{{months}}" as="m" hint-placeholder-count="6">
+            <button onClick="{{m.pick}}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;background:none;border:none;padding:0;cursor:pointer;height:100%;justify-content:flex-end">
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:600;color:rgba(22,24,28,.55)">{{m.k}}</span>
+              <span style="width:100%;border-radius:8px 8px 4px 4px;background:{{m.fill}};height:{{m.h}};display:block"></span>
+              <span style="font-size:11.5px;font-weight:700;color:{{m.labelColor}}">{{m.label}}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.38)">Detalhamento</div>
+        <sc-for list="{{monthRows}}" as="m" hint-placeholder-count="6">
+          <div style="border:1px solid rgba(22,24,28,.09);border-radius:18px;padding:13px 15px;display:flex;align-items:center;gap:14px">
+            <span style="font-size:14px;font-weight:800;width:62px;flex:none">{{m.label}}</span>
+            <span style="flex:1;display:flex;flex-direction:column;gap:4px">
+              <span style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:600"><span style="color:rgba(22,24,28,.5)">Receitas</span><span style="color:oklch(0.52 0.14 155);font-weight:700">{{m.rec}}</span></span>
+              <span style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:600"><span style="color:rgba(22,24,28,.5)">Despesas</span><span style="color:oklch(0.52 0.16 25);font-weight:700">{{m.desp}}</span></span>
+            </span>
+            <span style="text-align:right;flex:none">
+              <span style="display:block;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(22,24,28,.38)">Saldo</span>
+              <span style="display:block;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;margin-top:2px">{{m.saldo}}</span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isAdd}}" hint-placeholder-val="{{false}}">
+    <div style="padding:6px 20px 28px;display:flex;flex-direction:column;gap:16px;min-height:100%">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-top:4px">
+        <button onClick="{{cancel}}" style="background:none;border:none;font-size:14px;font-weight:700;color:rgba(22,24,28,.5);cursor:pointer;padding:0">Cancelar</button>
+        <span style="font-size:15px;font-weight:800">{{addTitle}}</span>
+        <button onClick="{{save}}" style="background:none;border:none;font-size:14px;font-weight:800;color:oklch(0.45 0.16 300);cursor:pointer;padding:0">Salvar</button>
+      </div>
+
+      <div style="display:flex;gap:6px;background:oklch(0.96 0.004 280);border-radius:14px;padding:4px">
+        <button onClick="{{tipoDesp}}" style="flex:1;border:none;border-radius:11px;padding:10px 0;font-size:13.5px;font-weight:700;cursor:pointer;background:{{tDespBg}};color:{{tDespFg}};box-shadow:{{tDespSh}}">Despesa</button>
+        <button onClick="{{tipoRec}}" style="flex:1;border:none;border-radius:11px;padding:10px 0;font-size:13.5px;font-weight:700;cursor:pointer;background:{{tRecBg}};color:{{tRecFg}};box-shadow:{{tRecSh}}">Receita</button>
+      </div>
+
+      <div style="text-align:center;padding:10px 0 4px">
+        <div style="font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.38)">Valor</div>
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:42px;font-weight:700;letter-spacing:-.03em;margin-top:4px;color:{{draftAmtColor}}">{{draftAmt}}</div>
+      </div>
+
+      <div>
+        <div style="font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.38);margin-bottom:9px">Categoria</div>
+        <div style="display:flex;flex-wrap:wrap;gap:7px">
+          <sc-for list="{{catChips}}" as="c" hint-placeholder-count="8">
+            <button onClick="{{c.pick}}" style="border:1px solid {{c.border}};background:{{c.bg}};color:{{c.fg}};border-radius:11px;padding:8px 12px;font-size:12.5px;font-weight:700;cursor:pointer">{{c.name}}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:9px">
+        <input value="{{draftDesc}}" onChange="{{setDesc}}" placeholder="Descrição" style="flex:1;border:1px solid rgba(22,24,28,.14);border-radius:14px;padding:12px 13px;font-size:14px;font-weight:600;outline:none;min-width:0"/>
+        <input value="{{draftDate}}" onChange="{{setDate}}" style="width:118px;border:1px solid rgba(22,24,28,.14);border-radius:14px;padding:12px 13px;font-size:14px;font-weight:600;outline:none"/>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+        <sc-for list="{{keys}}" as="k" hint-placeholder-count="12">
+          <button onClick="{{k.tap}}" style="border:1px solid rgba(22,24,28,.1);background:oklch(0.98 0.002 280);border-radius:16px;padding:14px 0;font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;cursor:pointer" style-hover="background:oklch(0.95 0.004 280)">{{k.label}}</button>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{isEditing}}" hint-placeholder-val="{{false}}">
+        <button onClick="{{del}}" style="border:1px solid oklch(0.88 0.07 25);background:oklch(0.97 0.02 25);color:oklch(0.5 0.17 25);border-radius:16px;padding:13px 0;font-size:13.5px;font-weight:800;cursor:pointer;width:100%">Excluir lançamento</button>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isMetas}}" hint-placeholder-val="{{false}}">
+    <div style="padding:6px 20px 108px;display:flex;flex-direction:column;gap:18px">
+      <div style="padding-top:6px;display:flex;align-items:flex-end;justify-content:space-between">
+        <div><div style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.03em">Metas</div><div style="font-size:13px;color:rgba(22,24,28,.5);font-weight:600;margin-top:2px">{{goalsSummary}}</div></div>
+        <button onClick="{{newGoal}}" style="border:none;background:oklch(0.36 0.12 300);color:#fff;border-radius:13px;padding:10px 14px;font-size:13px;font-weight:800;cursor:pointer">Nova</button>
+      </div>
+
+      <sc-for list="{{goalCards}}" as="g" hint-placeholder-count="3">
+        <button onClick="{{g.open}}" style="width:100%;text-align:left;border:1px solid rgba(22,24,28,.1);background:{{g.cardBg}};border-radius:24px;padding:18px;cursor:pointer;display:flex;flex-direction:column;gap:14px" style-hover="border-color:rgba(22,24,28,.24)">
+          <span style="display:flex;align-items:center;gap:14px">
+            <span style="position:relative;width:56px;height:56px;flex:none">
+              <svg width="56" height="56" viewBox="0 0 56 56" style="display:block;transform:rotate(-90deg)"><circle cx="28" cy="28" r="24" fill="none" stroke="rgba(22,24,28,.1)" stroke-width="6"></circle><circle cx="28" cy="28" r="24" fill="none" stroke="{{g.ring}}" stroke-width="6" stroke-linecap="round" stroke-dasharray="{{g.dash}}"></circle></svg>
+              <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700">{{g.pct}}</span>
+            </span>
+            <span style="flex:1;min-width:0">
+              <span style="display:flex;align-items:center;gap:7px"><span style="font-size:16px;font-weight:800;letter-spacing:-.01em">{{g.nome}}</span><sc-if value="{{g.done}}" hint-placeholder-val="{{false}}"><span style="font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:oklch(0.92 0.07 155);color:oklch(0.42 0.13 155);border-radius:6px;padding:3px 6px">Alcançada</span></sc-if></span>
+              <span style="display:block;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:600;color:rgba(22,24,28,.55);margin-top:3px">{{g.line}}</span>
+            </span>
+          </span>
+          <span style="display:block;height:7px;border-radius:4px;background:rgba(22,24,28,.09);overflow:hidden"><span style="display:block;height:100%;border-radius:4px;background:{{g.ring}};width:{{g.w}}"></span></span>
+          <span style="display:flex;justify-content:space-between;font-size:12.5px;font-weight:600;color:rgba(22,24,28,.5)"><span>{{g.faltam}}</span><span>{{g.ideal}}</span></span>
+        </button>
+      </sc-for>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isMeta}}" hint-placeholder-val="{{false}}">
+    <div style="padding:6px 20px 108px;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;align-items:center;gap:12px;padding-top:4px">
+        <button onClick="{{goMetas}}" style="background:none;border:none;font-size:20px;font-weight:700;color:rgba(22,24,28,.55);cursor:pointer;padding:0;line-height:1">‹</button>
+        <span style="font-size:15px;font-weight:800">{{goal.nome}}</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:8px 0 4px">
+        <div style="position:relative;width:164px;height:164px">
+          <svg width="164" height="164" viewBox="0 0 164 164" style="display:block;transform:rotate(-90deg)"><circle cx="82" cy="82" r="72" fill="none" stroke="oklch(0.94 0.01 300)" stroke-width="14"></circle><circle cx="82" cy="82" r="72" fill="none" stroke="oklch(0.42 0.15 300)" stroke-width="14" stroke-linecap="round" stroke-dasharray="{{goal.bigDash}}"></circle></svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:34px;font-weight:700;letter-spacing:-.03em">{{goal.pct}}</span>
+            <span style="font-size:12px;font-weight:700;color:rgba(22,24,28,.45)">{{goal.savedFmt}}</span>
+          </div>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:rgba(22,24,28,.55);text-align:center">{{goal.subtitle}}</div>
+      </div>
+
+      <div style="display:flex;gap:9px">
+        <div style="flex:1;border:1px solid rgba(22,24,28,.1);border-radius:18px;padding:13px"><div style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(22,24,28,.4)">Faltam</div><div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;margin-top:4px">{{goal.faltaFmt}}</div></div>
+        <div style="flex:1;border:1px solid rgba(22,24,28,.1);border-radius:18px;padding:13px"><div style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:rgba(22,24,28,.4)">Ideal por mês</div><div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:600;margin-top:4px">{{goal.idealFmt}}</div></div>
+      </div>
+
+      <div style="border:1px solid rgba(22,24,28,.1);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:11px">
+        <div style="font-size:13.5px;font-weight:800">Registrar depósito</div>
+        <div style="display:flex;gap:8px">
+          <input value="{{depVal}}" onChange="{{setDep}}" placeholder="R$ 0,00" style="flex:1;border:1px solid rgba(22,24,28,.14);border-radius:13px;padding:11px 12px;font-size:14px;font-weight:600;outline:none;min-width:0"/>
+          <input value="{{depDate}}" onChange="{{setDepDate}}" style="width:104px;border:1px solid rgba(22,24,28,.14);border-radius:13px;padding:11px 12px;font-size:14px;font-weight:600;outline:none"/>
+          <button onClick="{{addDep}}" style="border:none;background:oklch(0.36 0.12 300);color:#fff;border-radius:13px;padding:0 16px;font-size:13px;font-weight:800;cursor:pointer">Add</button>
+        </div>
+      </div>
+
+      <div style="border:1px solid rgba(22,24,28,.1);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:12px;background:oklch(0.98 0.006 250)">
+        <div style="font-size:13.5px;font-weight:800">Se eu depositar por mês…</div>
+        <div style="display:flex;align-items:baseline;justify-content:space-between"><span style="font-family:'Space Grotesk',sans-serif;font-size:24px;font-weight:700;letter-spacing:-.02em">{{calcFmt}}</span><span style="font-size:12.5px;font-weight:700;color:oklch(0.45 0.14 250)">{{calcResult}}</span></div>
+        <input type="range" min="100" max="3000" step="50" value="{{calcVal}}" onChange="{{setCalc}}" style="width:100%;accent-color:oklch(0.45 0.15 250)"/>
+        <div style="font-size:12.5px;font-weight:600;color:rgba(22,24,28,.5);line-height:1.4">{{calcNote}}</div>
+      </div>
+
+      <div style="border:1px solid rgba(22,24,28,.1);border-radius:20px;padding:16px">
+        <div style="font-size:13.5px;font-weight:800">Depósitos por mês</div>
+        <div style="display:flex;align-items:flex-end;gap:9px;height:110px;margin-top:14px">
+          <sc-for list="{{depBars}}" as="d" hint-placeholder-count="5">
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end">
+              <span style="font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;color:rgba(22,24,28,.5)">{{d.v}}</span>
+              <span style="width:100%;border-radius:7px 7px 3px 3px;background:oklch(0.62 0.13 300);height:{{d.h}};display:block"></span>
+              <span style="font-size:11px;font-weight:700;color:rgba(22,24,28,.45)">{{d.k}}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <button onClick="{{toggleDone}}" style="display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid {{doneBorder}};background:{{doneBg}};border-radius:18px;padding:14px 15px;cursor:pointer">
+        <span style="width:24px;height:24px;border-radius:7px;border:2px solid {{doneMark}};background:{{doneFill}};display:flex;align-items:center;justify-content:center;flex:none;color:#fff;font-size:13px;font-weight:800">{{doneCheck}}</span>
+        <span style="font-size:14px;font-weight:700">Alcançada</span>
+      </button>
+
+      <div style="display:flex;flex-direction:column;gap:2px">
+        <div style="font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.38);padding:2px 0 6px">Histórico de depósitos</div>
+        <sc-for list="{{depList}}" as="d" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 2px;border-bottom:1px solid rgba(22,24,28,.07)">
+            <span style="font-size:13.5px;font-weight:600;color:rgba(22,24,28,.6)">{{d.data}}</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:14.5px;font-weight:600">{{d.valor}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isMais}}" hint-placeholder-val="{{false}}">
+    <div style="padding:6px 20px 108px;display:flex;flex-direction:column;gap:18px">
+      <div style="padding-top:6px"><div style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;letter-spacing:-.03em">Mais</div></div>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button onClick="{{goOrc}}" style="display:flex;align-items:center;gap:13px;width:100%;text-align:left;border:1px solid rgba(22,24,28,.1);background:#fff;border-radius:18px;padding:15px;cursor:pointer" style-hover="border-color:rgba(22,24,28,.24)">
+          <span style="width:36px;height:36px;border-radius:11px;background:oklch(0.94 0.03 300);display:flex;align-items:center;justify-content:center;flex:none"><span style="width:13px;height:13px;border-radius:50%;border:3.5px solid oklch(0.45 0.15 300);display:block"></span></span>
+          <span style="flex:1"><span style="display:block;font-size:14.5px;font-weight:700">Categorias e orçamentos</span><span style="display:block;font-size:12.5px;color:rgba(22,24,28,.5);font-weight:600;margin-top:1px">{{orcSubtitle}}</span></span>
+          <span style="font-size:17px;color:rgba(22,24,28,.3);font-weight:700">›</span>
+        </button>
+
+        <sc-for list="{{maisRows}}" as="r" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:13px;width:100%;border:1px solid rgba(22,24,28,.08);background:oklch(0.985 0.002 280);border-radius:18px;padding:15px">
+            <span style="width:36px;height:36px;border-radius:11px;background:oklch(0.95 0.004 280);display:flex;align-items:center;justify-content:center;flex:none;font-size:12px;font-weight:800;color:rgba(22,24,28,.45)">{{r.mono}}</span>
+            <span style="flex:1"><span style="display:block;font-size:14.5px;font-weight:700;color:rgba(22,24,28,.75)">{{r.name}}</span><span style="display:block;font-size:12.5px;color:rgba(22,24,28,.45);font-weight:600;margin-top:1px">{{r.note}}</span></span>
+            <sc-if value="{{r.soon}}" hint-placeholder-val="{{true}}"><span style="font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;background:oklch(0.94 0.02 250);color:oklch(0.48 0.1 250);border-radius:6px;padding:4px 7px;flex:none">Em breve</span></sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{showBanks}}" hint-placeholder-val="{{true}}">
+        <div style="border:1px dashed rgba(22,24,28,.18);border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:13px">
+          <div><div style="font-size:13px;font-weight:800">Ícones de banco prontos</div><div style="font-size:12.5px;color:rgba(22,24,28,.5);font-weight:600;line-height:1.4;margin-top:2px">Aguardando a feature de cartões de crédito.</div></div>
+          <div style="display:flex;gap:9px">
+            <sc-for list="{{banks}}" as="b" hint-placeholder-count="6">
+              <span style="width:42px;height:42px;border-radius:13px;background:{{b.color}};color:#fff;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;flex:none">{{b.mono}}</span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isOrc}}" hint-placeholder-val="{{false}}">
+    <div style="padding:6px 20px 108px;display:flex;flex-direction:column;gap:18px">
+      <div style="display:flex;align-items:center;gap:12px;padding-top:4px">
+        <button onClick="{{goMais}}" style="background:none;border:none;font-size:20px;font-weight:700;color:rgba(22,24,28,.55);cursor:pointer;padding:0;line-height:1">‹</button>
+        <span style="font-size:15px;font-weight:800">Categorias e orçamentos</span>
+      </div>
+
+      <div style="border:1px solid rgba(22,24,28,.1);border-radius:24px;padding:20px;display:flex;flex-direction:column;align-items:center;gap:16px">
+        <div style="position:relative;width:180px;height:180px">
+          <svg width="180" height="180" viewBox="0 0 180 180" style="display:block;transform:rotate(-90deg)">
+            <circle cx="90" cy="90" r="74" fill="none" stroke="oklch(0.95 0.003 280)" stroke-width="18"></circle>
+            <sc-for list="{{donut}}" as="s" hint-placeholder-count="6"><circle cx="90" cy="90" r="74" fill="none" stroke="{{s.color}}" stroke-width="18" stroke-dasharray="{{s.dash}}" stroke-dashoffset="{{s.off}}"></circle></sc-for>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(22,24,28,.4)">Gasto no mês</span>
+            <span style="font-family:'Space Grotesk',sans-serif;font-size:25px;font-weight:700;letter-spacing:-.03em">{{despesasFmt}}</span>
+            <span style="font-size:12px;font-weight:700;color:rgba(22,24,28,.45)">de {{limiteTotalFmt}}</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px 14px;justify-content:center">
+          <sc-for list="{{donut}}" as="s" hint-placeholder-count="6">
+            <span style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:rgba(22,24,28,.6)"><span style="width:8px;height:8px;border-radius:3px;background:{{s.color}};display:block"></span>{{s.name}} · {{s.share}}</span>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <sc-for list="{{budgetRows}}" as="b" hint-placeholder-count="7">
+          <div style="border:1px solid {{b.border}};background:{{b.bg}};border-radius:20px;padding:15px">
+            <div style="display:flex;align-items:center;gap:11px">
+              <span style="width:32px;height:32px;border-radius:10px;background:{{b.color}};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;flex:none">{{b.mono}}</span>
+              <span style="flex:1;min-width:0"><span style="display:block;font-size:14px;font-weight:800">{{b.name}}</span><span style="display:block;font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:600;color:rgba(22,24,28,.55);margin-top:1px">{{b.line}}</span></span>
+              <span style="display:flex;align-items:center;gap:6px;flex:none">
+                <button onClick="{{b.dec}}" style="width:28px;height:28px;border-radius:9px;border:1px solid rgba(22,24,28,.14);background:#fff;font-size:15px;font-weight:800;cursor:pointer;line-height:1;color:rgba(22,24,28,.6)">−</button>
+                <button onClick="{{b.inc}}" style="width:28px;height:28px;border-radius:9px;border:1px solid rgba(22,24,28,.14);background:#fff;font-size:15px;font-weight:800;cursor:pointer;line-height:1;color:rgba(22,24,28,.6)">+</button>
+              </span>
+            </div>
+            <div style="height:8px;border-radius:5px;background:rgba(22,24,28,.08);overflow:hidden;margin-top:12px"><div style="height:100%;border-radius:5px;background:{{b.barColor}};width:{{b.w}}"></div></div>
+            <sc-if value="{{b.over}}" hint-placeholder-val="{{false}}">
+              <div style="display:flex;align-items:center;gap:7px;margin-top:10px">
+                <span style="width:16px;height:16px;border-radius:5px;background:oklch(0.55 0.19 25);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex:none">!</span>
+                <span style="font-size:12.5px;font-weight:700;color:oklch(0.5 0.17 25)">{{b.overText}}</span>
+              </div>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{isEmpty}}" hint-placeholder-val="{{false}}">
+    <div style="padding:30px 26px 40px;display:flex;flex-direction:column;gap:26px;min-height:100%">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span style="width:52px;height:52px;border-radius:16px;background:oklch(0.36 0.12 300);display:flex;align-items:center;justify-content:center"><span style="width:18px;height:18px;background:#fff;transform:rotate(45deg);border-radius:3px;display:block"></span></span>
+        <div>
+          <div style="font-family:'Space Grotesk',sans-serif;font-size:30px;font-weight:700;letter-spacing:-.03em;line-height:1.1">Bem-vindo ao<br>Vertize</div>
+          <div style="font-size:14.5px;color:rgba(22,24,28,.55);font-weight:600;line-height:1.45;margin-top:10px;text-wrap:pretty">Registre receitas e despesas, defina limites por categoria e acompanhe suas metas de economia.</div>
+        </div>
+      </div>
+
+      <div style="border-radius:22px;overflow:hidden;background:oklch(0.97 0.004 280);height:212px;position:relative;display:flex;align-items:center;justify-content:center">
+        <svg width="100%" height="100%" viewBox="0 0 320 212" preserveAspectRatio="none" style="position:absolute;inset:0"><defs><pattern id="vzstripe" width="9" height="9" patternTransform="rotate(45)" patternUnits="userSpaceOnUse"><rect width="4" height="9" fill="rgba(22,24,28,.05)"></rect></pattern></defs><rect width="320" height="212" fill="url(#vzstripe)"></rect></svg>
+        <span style="position:relative;font-family:ui-monospace,Menlo,monospace;font-size:11.5px;font-weight:600;color:rgba(22,24,28,.42);letter-spacing:.02em;text-align:center;padding:0 20px">ilustração de onboarding<br>(3 telas, arte a definir)</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <sc-for list="{{onboarding}}" as="o" hint-placeholder-count="3">
+          <div style="display:flex;gap:11px;align-items:flex-start">
+            <span style="width:22px;height:22px;border-radius:7px;background:oklch(0.94 0.03 300);color:oklch(0.42 0.15 300);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex:none;margin-top:1px">{{o.n}}</span>
+            <span style="font-size:13.5px;font-weight:600;color:rgba(22,24,28,.65);line-height:1.4">{{o.t}}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="margin-top:auto;display:flex;flex-direction:column;gap:9px">
+        <button onClick="{{startAdd}}" style="border:none;background:oklch(0.36 0.12 300);color:#fff;border-radius:17px;padding:16px 0;font-size:14.5px;font-weight:800;cursor:pointer;width:100%">Adicionar primeiro lançamento</button>
+        <button onClick="{{goHome}}" style="border:none;background:none;color:rgba(22,24,28,.5);border-radius:17px;padding:12px 0;font-size:13.5px;font-weight:700;cursor:pointer;width:100%">Explorar com dados de exemplo</button>
+      </div>
+    </div>
+  </sc-if>
+
+  </div>
+
+  <sc-if value="{{showNav}}" hint-placeholder-val="{{true}}">
+    <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(255,255,255,.94);backdrop-filter:blur(14px);border-top:1px solid rgba(22,24,28,.09);padding:9px 14px 20px;display:flex;align-items:flex-end;justify-content:space-between;z-index:20">
+      <button onClick="{{goHome}}" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;padding:4px 0">
+        <span style="width:17px;height:17px;border-radius:5px;background:{{navHome}};display:block"></span>
+        <span style="font-size:10.5px;font-weight:700;color:{{navHome}}">Início</span>
+      </button>
+      <button onClick="{{goHist}}" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;padding:4px 0">
+        <span style="display:flex;align-items:flex-end;gap:2.5px;height:17px"><span style="width:4px;height:9px;border-radius:2px;background:{{navHist}};display:block"></span><span style="width:4px;height:16px;border-radius:2px;background:{{navHist}};display:block"></span><span style="width:4px;height:12px;border-radius:2px;background:{{navHist}};display:block"></span></span>
+        <span style="font-size:10.5px;font-weight:700;color:{{navHist}}">Histórico</span>
+      </button>
+      <button onClick="{{startAdd}}" style="flex:1;background:none;border:none;display:flex;justify-content:center;cursor:pointer;padding:0 0 6px">
+        <span style="width:54px;height:54px;border-radius:19px;background:oklch(0.36 0.12 300);box-shadow:0 10px 22px -8px oklch(0.36 0.12 300 / .8);display:flex;align-items:center;justify-content:center;position:relative;margin-top:-16px">
+          <span style="position:absolute;width:20px;height:2.6px;border-radius:2px;background:#fff;display:block"></span>
+          <span style="position:absolute;width:2.6px;height:20px;border-radius:2px;background:#fff;display:block"></span>
+        </span>
+      </button>
+      <button onClick="{{goMetas}}" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;padding:4px 0">
+        <span style="width:15px;height:15px;background:{{navMetas}};transform:rotate(45deg);border-radius:3px;display:block;margin:1px 0"></span>
+        <span style="font-size:10.5px;font-weight:700;color:{{navMetas}}">Metas</span>
+      </button>
+      <button onClick="{{goMais}}" style="flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;padding:4px 0">
+        <span style="display:flex;align-items:center;gap:3px;height:17px"><span style="width:4px;height:4px;border-radius:50%;background:{{navMais}};display:block"></span><span style="width:4px;height:4px;border-radius:50%;background:{{navMais}};display:block"></span><span style="width:4px;height:4px;border-radius:50%;background:{{navMais}};display:block"></span></span>
+        <span style="font-size:10.5px;font-weight:700;color:{{navMais}}">Mais</span>
+      </button>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;hist&quot;,&quot;add&quot;,&quot;metas&quot;,&quot;meta&quot;,&quot;mais&quot;,&quot;orc&quot;,&quot;empty&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showInsight&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;showBanks&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  catColor = {
+    'Aluguel':'oklch(0.52 0.16 300)','Mercado':'oklch(0.55 0.15 250)','Transporte':'oklch(0.52 0.11 210)',
+    'Restaurante':'oklch(0.6 0.13 62)','Lazer':'oklch(0.55 0.14 155)','Saúde':'oklch(0.57 0.16 22)',
+    'Assinaturas':'oklch(0.5 0.07 285)','Outros':'oklch(0.55 0.02 280)',
+    'Salário':'oklch(0.5 0.14 155)','Freelance':'oklch(0.52 0.13 175)','Investimentos':'oklch(0.5 0.12 200)','Presente':'oklch(0.55 0.14 320)'
+  };
+  cats = {
+    despesa:['Aluguel','Mercado','Transporte','Restaurante','Lazer','Saúde','Assinaturas','Outros'],
+    receita:['Salário','Freelance','Investimentos','Presente','Outros']
+  };
+  seedTx = [
+    {id:1,tipo:'receita',cat:'Salário',desc:'Salário setembro',valor:8200,dia:1},
+    {id:2,tipo:'despesa',cat:'Aluguel',desc:'Aluguel + condomínio',valor:2100,dia:1},
+    {id:3,tipo:'despesa',cat:'Assinaturas',desc:'Streaming e nuvem',valor:54.9,dia:2},
+    {id:4,tipo:'despesa',cat:'Mercado',desc:'Compra da semana',valor:486.9,dia:3},
+    {id:5,tipo:'despesa',cat:'Transporte',desc:'Combustível',valor:89,dia:3},
+    {id:6,tipo:'receita',cat:'Freelance',desc:'Projeto landing page',valor:1450,dia:4},
+    {id:7,tipo:'despesa',cat:'Restaurante',desc:'Almoço com a equipe',valor:132.5,dia:4},
+    {id:8,tipo:'despesa',cat:'Lazer',desc:'Show no Circo Voador',valor:240,dia:5},
+    {id:9,tipo:'despesa',cat:'Saúde',desc:'Consulta',valor:180,dia:5}
+  ];
+  seedGoals = [
+    {id:'g1',nome:'Viagem ao Chile',alvo:8000,alvoMes:11,alvoAno:2026,done:false,dep:[{v:1200,d:'15/06/2026',k:'jun'},{v:900,d:'15/07/2026',k:'jul'},{v:1000,d:'12/08/2026',k:'ago'},{v:800,d:'02/09/2026',k:'set'}]},
+    {id:'g2',nome:'Reserva de emergência',alvo:15000,alvoMes:5,alvoAno:2027,done:false,dep:[{v:2000,d:'10/05/2026',k:'mai'},{v:1500,d:'10/06/2026',k:'jun'},{v:1500,d:'10/07/2026',k:'jul'},{v:1500,d:'10/08/2026',k:'ago'}]},
+    {id:'g3',nome:'Notebook novo',alvo:6000,alvoMes:2,alvoAno:2027,done:true,dep:[{v:3000,d:'20/04/2026',k:'abr'},{v:3000,d:'18/06/2026',k:'jun'}]}
+  ];
+  hist = [
+    {k:'abr',label:'Abril',rec:8600,desp:5210},{k:'mai',label:'Maio',rec:9100,desp:6480},
+    {k:'jun',label:'Junho',rec:8600,desp:7020},{k:'jul',label:'Julho',rec:10250,desp:6150},
+    {k:'ago',label:'Agosto',rec:8900,desp:7310}
+  ];
+  prevSamePeriod = 2810;
+  state = {
+    screen: this.props.screen || 'home',
+    filter: 'tudo',
+    tx: this.seedTx,
+    goals: this.seedGoals,
+    budgets: {'Aluguel':2200,'Mercado':800,'Transporte':300,'Restaurante':400,'Lazer':200,'Saúde':250,'Assinaturas':50},
+    draft: null, goalId: 'g1', toast: null, calc: 700, dep: '', depDate: '05/09/2026'
+  };
+  fmt(n){ return 'R$ ' + Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+  short(n){ return 'R$ ' + Math.round(n).toLocaleString('pt-BR'); }
+  go(s){ this.setState({screen:s}); }
+  notify(title,body){
+    clearTimeout(this._t);
+    this.setState({toast:true,toastTitle:title,toastBody:body});
+    this._t = setTimeout(()=>this.setState({toast:null}),4200);
+  }
+  componentWillUnmount(){ clearTimeout(this._t); }
+  openAdd(tipo){
+    this.setState({screen:'add',draft:{tipo:tipo||'despesa',cat:tipo==='receita'?'Salário':'Mercado',desc:'',cents:'',data:'05/09/2026'}});
+  }
+  editTx(t){
+    this.setState({screen:'add',draft:{id:t.id,tipo:t.tipo,cat:t.cat,desc:t.desc,cents:String(Math.round(t.valor*100)),data:'0'+t.dia+'/09/2026'}});
+  }
+  tap(k){
+    const d = {...this.state.draft};
+    if(k==='del') d.cents = d.cents.slice(0,-1);
+    else if(k==='00') d.cents = (d.cents+'00').slice(0,9);
+    else d.cents = (d.cents+k).slice(0,9);
+    this.setState({draft:d});
+  }
+  save(){
+    const d = this.state.draft; if(!d) return;
+    const valor = (parseInt(d.cents||'0',10))/100;
+    if(!valor){ this.notify('Valor obrigatório','Informe um valor maior que zero para salvar.'); return; }
+    const dia = parseInt((d.data||'').slice(0,2),10)||5;
+    let tx;
+    if(d.id) tx = this.state.tx.map(t=>t.id===d.id?{...t,tipo:d.tipo,cat:d.cat,desc:d.desc||d.cat,valor,dia}:t);
+    else tx = [...this.state.tx,{id:Date.now(),tipo:d.tipo,cat:d.cat,desc:d.desc||d.cat,valor,dia}];
+    const gasto = tx.filter(t=>t.tipo==='despesa'&&t.cat===d.cat).reduce((a,b)=>a+b.valor,0);
+    const lim = this.state.budgets[d.cat];
+    this.setState({tx,draft:null,screen:'home'});
+    if(d.tipo==='despesa'&&lim&&gasto>lim) this.notify('Orçamento de '+d.cat+' estourado', this.fmt(gasto)+' de '+this.fmt(lim)+' — '+this.fmt(gasto-lim)+' acima do limite.');
+  }
+  del(){
+    const d = this.state.draft;
+    this.setState({tx:this.state.tx.filter(t=>t.id!==d.id),draft:null,screen:'home'});
+  }
+  bump(cat,delta){
+    const budgets = {...this.state.budgets};
+    budgets[cat] = Math.max(50,(budgets[cat]||0)+delta);
+    const gasto = this.state.tx.filter(t=>t.tipo==='despesa'&&t.cat===cat).reduce((a,b)=>a+b.valor,0);
+    this.setState({budgets});
+    if(gasto>budgets[cat]) this.notify('Orçamento de '+cat+' estourado', this.fmt(gasto)+' de '+this.fmt(budgets[cat])+' — '+this.fmt(gasto-budgets[cat])+' acima do limite.');
+  }
+  addDep(){
+    const raw = String(this.state.dep).replace(/[^0-9,.]/g,'').replace('.','').replace(',','.');
+    const v = parseFloat(raw);
+    if(!v){ this.notify('Depósito inválido','Digite um valor, por exemplo 350,00.'); return; }
+    const mk = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    const mi = (parseInt(String(this.state.depDate).slice(3,5),10)||9)-1;
+    const goals = this.state.goals.map(g=>g.id===this.state.goalId?{...g,dep:[...g.dep,{v,d:this.state.depDate,k:mk[mi]}]}:g);
+    this.setState({goals,dep:''});
+  }
+  monthsUntil(m,y){ return Math.max(1,(y-2026)*12 + (m-8)); }
+  renderVals(){
+    const S = this.state, f = n=>this.fmt(n);
+    const rec = S.tx.filter(t=>t.tipo==='receita').reduce((a,b)=>a+b.valor,0);
+    const desp = S.tx.filter(t=>t.tipo==='despesa').reduce((a,b)=>a+b.valor,0);
+    const mk = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+    const filtered = S.tx.filter(t=>S.filter==='tudo'||(S.filter==='receitas'?t.tipo==='receita':t.tipo==='despesa'))
+      .slice().sort((a,b)=>b.dia-a.dia||b.id-a.id);
+    let lastDay = null;
+    const txList = filtered.map(t=>{
+      const showDay = t.dia!==lastDay; lastDay = t.dia;
+      const isRec = t.tipo==='receita';
+      const c = this.catColor[t.cat] || 'oklch(0.55 0.02 280)';
+      return {...t, showDay, dayLabel:(t.dia<10?'0':'')+t.dia+' de setembro',
+        mono:t.cat.slice(0,2).toUpperCase(), color:c, tint:c.replace(/oklch\(([\d.]+) ([\d.]+)/,(m,l,ch)=>'oklch(0.95 '+Math.min(0.04,parseFloat(ch)/4)),
+        amt:(isRec?'+ ':'− ')+f(t.valor), amtColor:isRec?'oklch(0.5 0.14 155)':'#16181c',
+        edit:()=>this.editTx(t)};
+    });
+
+    const pct = Math.round((desp-this.prevSamePeriod)/this.prevSamePeriod*100);
+    const insightText = pct>=0
+      ? 'Você já gastou '+pct+'% mais que no mesmo período de agosto. Lazer e Assinaturas passaram do limite.'
+      : 'Seus gastos estão '+Math.abs(pct)+'% abaixo do mesmo período de agosto. Bom ritmo.';
+
+    const allMonths = [...this.hist,{k:'set',label:'Setembro',rec,desp}];
+    const saldos = allMonths.map(m=>m.rec-m.desp);
+    const maxS = Math.max(...saldos);
+    const months = allMonths.map((m,i)=>({k:m.k,label:this.short(saldos[i]).replace('R$ ',''),
+      h:Math.max(8,Math.round(saldos[i]/maxS*112))+'px',
+      fill:i===allMonths.length-1?'oklch(0.42 0.15 300)':'oklch(0.86 0.05 300)',
+      labelColor:i===allMonths.length-1?'#16181c':'rgba(22,24,28,.45)', pick:()=>{}}));
+    const monthRows = allMonths.slice().reverse().map((m,i)=>({label:m.label,rec:f(m.rec),desp:f(m.desp),saldo:this.short(m.rec-m.desp)}));
+
+    const spentBy = {};
+    S.tx.filter(t=>t.tipo==='despesa').forEach(t=>{spentBy[t.cat]=(spentBy[t.cat]||0)+t.valor;});
+    const C = 2*Math.PI*74;
+    let acc = 0;
+    const donut = Object.keys(spentBy).sort((a,b)=>spentBy[b]-spentBy[a]).map(cat=>{
+      const share = spentBy[cat]/desp, len = share*C;
+      const off = -acc; acc += len;
+      return {name:cat,color:this.catColor[cat]||'oklch(0.55 0.02 280)',share:Math.round(share*100)+'%',
+        dash:len.toFixed(1)+' '+(C-len).toFixed(1), off:off.toFixed(1)};
+    });
+    const budgetRows = Object.keys(S.budgets).map(cat=>{
+      const g = spentBy[cat]||0, lim = S.budgets[cat], p = g/lim, over = g>lim;
+      return {name:cat,mono:cat.slice(0,2).toUpperCase(),color:this.catColor[cat],
+        line:f(g)+' de '+f(lim),
+        w:Math.min(100,Math.round(p*100))+'%',
+        barColor:over?'oklch(0.55 0.19 25)':(p>0.85?'oklch(0.68 0.14 62)':this.catColor[cat]),
+        border:over?'oklch(0.87 0.08 25)':'rgba(22,24,28,.1)', bg:over?'oklch(0.985 0.012 25)':'#fff',
+        over, overText:'Estourou o limite em '+f(g-lim),
+        inc:()=>this.bump(cat,50), dec:()=>this.bump(cat,-50)};
+    });
+    const limiteTotal = Object.values(S.budgets).reduce((a,b)=>a+b,0);
+    const overCount = budgetRows.filter(b=>b.over).length;
+
+    const goalData = S.goals.map(g=>{
+      const saved = g.dep.reduce((a,b)=>a+b.v,0);
+      const p = Math.min(1,saved/g.alvo), falta = Math.max(0,g.alvo-saved);
+      const m = this.monthsUntil(g.alvoMes,g.alvoAno);
+      return {...g,saved,p,falta,ideal:falta/m,meses:m};
+    });
+    const goalCards = goalData.map(g=>({
+      id:g.id,nome:g.nome,done:g.done,pct:Math.round(g.p*100)+'%',
+      ring:g.done?'oklch(0.55 0.14 155)':'oklch(0.45 0.15 300)',
+      cardBg:g.done?'oklch(0.99 0.01 155)':'#fff',
+      dash:(g.p*2*Math.PI*24).toFixed(1)+' 999', w:Math.round(g.p*100)+'%',
+      line:this.short(g.saved)+' de '+this.short(g.alvo),
+      faltam:g.done?'Meta concluída':'Faltam '+this.short(g.falta),
+      ideal:g.done?'':this.short(g.ideal)+'/mês',
+      open:()=>this.setState({goalId:g.id,screen:'meta'})
+    }));
+    const G = goalData.find(g=>g.id===S.goalId) || goalData[0];
+    const depAgg = {};
+    G.dep.forEach(d=>{depAgg[d.k]=(depAgg[d.k]||0)+d.v;});
+    const dkeys = Object.keys(depAgg);
+    const dmax = Math.max(...dkeys.map(k=>depAgg[k]),1);
+    const depBars = dkeys.map(k=>({k,v:this.short(depAgg[k]).replace('R$ ',''),h:Math.max(8,Math.round(depAgg[k]/dmax*76))+'px'}));
+    const calcMonths = Math.ceil(G.falta/S.calc);
+    const endIdx = 8 + calcMonths;
+    const calcResult = G.falta<=0 ? 'já alcançada' : mk[endIdx%12]+'/'+(2026+Math.floor(endIdx/12));
+    const goal = {
+      nome:G.nome, pct:Math.round(G.p*100)+'%', savedFmt:this.short(G.saved),
+      bigDash:(G.p*2*Math.PI*72).toFixed(1)+' 999',
+      subtitle:'Objetivo '+f(G.alvo)+' · até '+mk[G.alvoMes]+'/'+G.alvoAno,
+      faltaFmt:this.short(G.falta), idealFmt:this.short(G.ideal)
+    };
+
+    const sel = (on)=>on?{bg:'#fff',fg:'#16181c',sh:'0 1px 3px rgba(22,24,28,.12)'}:{bg:'transparent',fg:'rgba(22,24,28,.5)',sh:'none'};
+    const ft = sel(S.filter==='tudo'), fr = sel(S.filter==='receitas'), fd = sel(S.filter==='despesas');
+    const d = S.draft||{tipo:'despesa',cat:'',desc:'',cents:'',data:''};
+    const td = sel(d.tipo==='despesa'), tr = sel(d.tipo==='receita');
+    const catChips = (this.cats[d.tipo]||[]).map(name=>{
+      const on = name===d.cat, c = this.catColor[name];
+      return {name,pick:()=>this.setState({draft:{...d,cat:name}}),
+        bg:on?c:'#fff', fg:on?'#fff':'rgba(22,24,28,.65)', border:on?c:'rgba(22,24,28,.14)'};
+    });
+    const keys = ['1','2','3','4','5','6','7','8','9','00','0','del'].map(k=>({label:k==='del'?'⌫':k,tap:()=>this.tap(k)}));
+    const active = 'oklch(0.42 0.15 300)', idle = 'rgba(22,24,28,.34)';
+    const sc = S.screen;
+
+    return {
+      isHome:sc==='home', isHist:sc==='hist', isAdd:sc==='add', isMetas:sc==='metas',
+      isMeta:sc==='meta', isMais:sc==='mais', isOrc:sc==='orc', isEmpty:sc==='empty',
+      showNav: sc!=='add' && sc!=='empty',
+      showInsight: this.props.showInsight !== false,
+      showBanks: this.props.showBanks !== false,
+      saldoFmt:f(rec-desp), receitasFmt:f(rec), despesasFmt:f(desp), insightText,
+      txList, months, monthRows, saldoMedioFmt:this.short(saldos.reduce((a,b)=>a+b,0)/saldos.length),
+      donut, budgetRows, limiteTotalFmt:f(limiteTotal),
+      orcSubtitle: overCount ? overCount+' categoria'+(overCount>1?'s':'')+' acima do limite' : 'Todos os limites em dia',
+      goalCards, goal, depBars,
+      goalsSummary:this.short(goalData.reduce((a,b)=>a+b.saved,0))+' guardados em '+goalData.length+' metas',
+      depList:[...G.dep].reverse().map(x=>({data:x.d,valor:f(x.v)})),
+      depVal:S.dep, depDate:S.depDate, calcVal:S.calc, calcFmt:this.short(S.calc)+'/mês',
+      calcResult, calcNote: G.falta<=0 ? 'Você já bateu o objetivo desta meta.' : 'Nesse ritmo faltam '+calcMonths+' depósitos para chegar aos '+this.short(G.alvo)+'.',
+      doneCheck:G.done?'✓':'', doneFill:G.done?'oklch(0.5 0.14 155)':'transparent',
+      doneMark:G.done?'oklch(0.5 0.14 155)':'rgba(22,24,28,.2)',
+      doneBorder:G.done?'oklch(0.88 0.07 155)':'rgba(22,24,28,.1)',
+      doneBg:G.done?'oklch(0.98 0.015 155)':'#fff',
+      toast:S.toast, toastTitle:S.toastTitle, toastBody:S.toastBody,
+      addTitle:d.id?'Editar lançamento':'Novo lançamento', isEditing:!!d.id,
+      draftAmt:f((parseInt(d.cents||'0',10))/100),
+      draftAmtColor:d.tipo==='receita'?'oklch(0.48 0.14 155)':'#16181c',
+      draftDesc:d.desc, draftDate:d.data, catChips, keys,
+      fTudoBg:ft.bg,fTudoFg:ft.fg,fTudoSh:ft.sh,fRecBg:fr.bg,fRecFg:fr.fg,fRecSh:fr.sh,fDespBg:fd.bg,fDespFg:fd.fg,fDespSh:fd.sh,
+      tDespBg:td.bg,tDespFg:td.fg,tDespSh:td.sh,tRecBg:tr.bg,tRecFg:tr.fg,tRecSh:tr.sh,
+      navHome:sc==='home'?active:idle, navHist:sc==='hist'?active:idle,
+      navMetas:(sc==='metas'||sc==='meta')?active:idle, navMais:(sc==='mais'||sc==='orc')?active:idle,
+      maisRows:[
+        {mono:'CC',name:'Cartões de crédito',note:'Ícones de banco prontos em BankVisuals',soon:true},
+        {mono:'CP',name:'Contas a pagar',note:'Lembrete e notificação — plano desenhado',soon:true},
+        {mono:'EX',name:'Exportar dados',note:'CSV do período',soon:false},
+        {mono:'NT',name:'Notificações',note:'Orçamento estourado, lembretes',soon:false}
+      ],
+      banks:[{mono:'NU',color:'oklch(0.5 0.2 310)'},{mono:'IT',color:'oklch(0.62 0.17 55)'},{mono:'IN',color:'oklch(0.62 0.19 40)'},{mono:'C6',color:'oklch(0.3 0.01 280)'},{mono:'SA',color:'oklch(0.52 0.2 25)'},{mono:'SI',color:'oklch(0.5 0.13 155)'}],
+      onboarding:[{n:'1',t:'Lance receitas e despesas em segundos, com categorias já prontas.'},{n:'2',t:'Defina um limite mensal por categoria e receba aviso quando estourar.'},{n:'3',t:'Crie metas de economia e acompanhe o quanto falta para chegar lá.'}],
+      goHome:()=>this.go('home'), goHist:()=>this.go('hist'), goMetas:()=>this.go('metas'),
+      goMais:()=>this.go('mais'), goOrc:()=>this.go('orc'), startAdd:()=>this.openAdd('despesa'),
+      newGoal:()=>this.notify('Nova meta','Fluxo de criação: nome, ícone, valor objetivo e data alvo.'),
+      cancel:()=>this.setState({draft:null,screen:'home'}), save:()=>this.save(), del:()=>this.del(),
+      tipoDesp:()=>this.setState({draft:{...d,tipo:'despesa',cat:'Mercado'}}),
+      tipoRec:()=>this.setState({draft:{...d,tipo:'receita',cat:'Salário'}}),
+      setDesc:(e)=>this.setState({draft:{...d,desc:e.target.value}}),
+      setDate:(e)=>this.setState({draft:{...d,data:e.target.value}}),
+      setTudo:()=>this.setState({filter:'tudo'}), setRec:()=>this.setState({filter:'receitas'}), setDesp:()=>this.setState({filter:'despesas'}),
+      setDep:(e)=>this.setState({dep:e.target.value}), setDepDate:(e)=>this.setState({depDate:e.target.value}),
+      addDep:()=>this.addDep(), setCalc:(e)=>this.setState({calc:parseInt(e.target.value,10)}),
+      toggleDone:()=>this.setState({goals:this.state.goals.map(g=>g.id===G.id?{...g,done:!g.done}:g)})
+    };
+  }
+}
+</script>
+</body>
+</html>
